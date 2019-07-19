@@ -1,0 +1,23 @@
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\bin\Debug\SummonersWar.exe.config
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\bin\Debug\SummonersWar.exe
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\bin\Debug\SummonersWar.pdb
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.AutoClick.resources
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.Properties.Resources.resources
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csproj.GenerateResource.Cache
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.exe
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.pdb
+c:\users\barry.yang\documents\visual studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.hWndList.resources
+C:\Users\barry.yang\Documents\Visual Studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csprojResolveAssemblyReference.cache
+C:\Users\barry.yang\Documents\Visual Studio 2015\Projects\SummonersWar\SummonersWar\obj\Debug\SummonersWar.SummonerAssistant.resources
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\bin\Debug\SummonersWar.exe.config
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\bin\Debug\SummonersWar.exe
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\bin\Debug\SummonersWar.pdb
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.AutoClick.resources
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.hWndList.resources
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.Properties.Resources.resources
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.SummonerAssistant.resources
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csproj.GenerateResource.Cache
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csproj.CoreCompileInputs.cache
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.exe
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.pdb
+C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csprojResolveAssemblyReference.cache
