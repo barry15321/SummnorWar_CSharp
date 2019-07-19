@@ -37,15 +37,18 @@ namespace SummonersWar
             sw.Reset();
             sw.Start();
             Image img = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\ms.jpg");
-
-            for (int i = 0; i < img.Width; i++)
+            Bitmap s = (Bitmap)img;
+            for (int i = 0; i < s.Width; i++)
             {
-                for (int j = 0; j < img.Height; j++)
+                for (int j = 0; j < s.Height; j++)
                 {
-
+                    Color pixel = s.GetPixel(i, j);
+                    Console.WriteLine("i = " + i.ToString() + " , j = " + j.ToString() + " , " + pixel.ToArgb()
+                        + " , A : " + pixel.A + " R : " + pixel.R + " G : " + pixel.G + " B : " + pixel.B);
                 }
             }
 
+            Console.WriteLine("Img Size : " + s.Width + " * " + s.Height + "( wid * hei )");
             sw.Stop();
             Console.WriteLine("done. Time spend : " + sw.Elapsed.TotalMilliseconds.ToString() + "ms .");
         }

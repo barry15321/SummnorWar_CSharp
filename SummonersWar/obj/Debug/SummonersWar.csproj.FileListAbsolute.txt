@@ -20,4 +20,3 @@ C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersW
 C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csproj.CoreCompileInputs.cache
 C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.exe
 C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.pdb
-C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csprojResolveAssemblyReference.cache
