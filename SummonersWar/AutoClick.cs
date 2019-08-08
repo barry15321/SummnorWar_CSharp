@@ -36,27 +36,123 @@ namespace SummonersWar
 
         private void CloseBtn_Click(object sender, EventArgs e)
         {
+            //test();
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Reset();
             sw.Start();
 
-            test();
-            //Image img = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Source.png");
-            //Bitmap s = (Bitmap)img;
+            Point pt = new Point(-1, -1);
+            Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Source.png");
+            Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\cyrstal.png");
 
-            //for (int i = 0; i < s.Width; i++)
-            //{
-            //    for (int j = 0; j < s.Height; j++)
-            //    {
-            //        Color pixel = s.GetPixel(i, j);
-            //        //Console.WriteLine("i = " + i.ToString() + " , j = " + j.ToString() + " , " + pixel.ToArgb()
-            //        //    + " , A : " + pixel.A + " R : " + pixel.R + " G : " + pixel.G + " B : " + pixel.B);
-            //    }
-            //}
+            pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1, 0);
 
-            //Console.WriteLine("Img Size : " + s.Width + " * " + s.Height + " ( wid * hei )");
-            //sw.Stop();
-            //Console.WriteLine("done. Time spend : " + sw.Elapsed.TotalMilliseconds.ToString() + "ms .");
+            sw.Stop();
+
+            Console.WriteLine("StopWatch : " + sw.Elapsed.TotalMilliseconds.ToString() + "ms .");
+            Console.WriteLine("Result : (" + pt.X + " , " + pt.Y + " )");
+
+        }
+
+        private Point SearchBitmap(Bitmap ParentBitmap , Bitmap ChildBitmap , int ImageLocationX = -1 , int ImageLocationY = -1 , int Choice = 1)
+        {
+            Point pt = new Point(-1, -1);
+
+            LockBitmap ParentMap = new LockBitmap(ParentBitmap);
+            LockBitmap ChildMap = new LockBitmap(ChildBitmap);
+
+            ParentMap.LockBits();
+            ChildMap.LockBits();
+
+            if (ImageLocationX == -1 || ImageLocationY == -1)
+            {
+                for (int i = 0; i < ParentMap.Width; i++)
+                {
+                    bool IsMatch = false;
+                    for (int j = 0; j < ParentMap.Height; j++)
+                    {
+                        if (i + ChildMap.Width < ParentMap.Width && j + ChildMap.Height < ParentMap.Height)
+                        {
+                            var ParentPixel = ParentMap.GetPixel(i, j);
+                            bool IsSame = true;
+                            for (int i2 = 0; i2 < ChildMap.Width; i2++)
+                            {
+                                for (int j2 = 0; j2 < ChildMap.Height; j2++)
+                                {
+                                    if (ParentMap.GetPixel(i + i2, j + j2) != ChildMap.GetPixel(i2, j2))
+                                    {
+                                        IsSame = false;
+                                        break;
+                                    }
+                                }
+                                if (!IsSame)
+                                    break;
+                            }
+                            if (IsSame)
+                                return new Point(i, j);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (ImageLocationX + ChildBitmap.Width < ParentBitmap.Width && ImageLocationY + ChildBitmap.Height < ParentBitmap.Height)
+                {
+                    bool IsMatch = true;
+                    for (int i = 0; i < ChildBitmap.Width; i++)
+                    {
+                        for (int j = 0; j < ChildBitmap.Height; j++)
+                        {
+                            if (ParentMap.GetPixel(ImageLocationX + i, ImageLocationY + j) != ChildMap.GetPixel(i, j))
+                            {
+                                IsMatch = false;
+                                break;
+                            }
+                        }
+
+                        if (!IsMatch)
+                            break;
+                    }
+
+                    if (IsMatch)
+                    {
+                        return new Point(ImageLocationX, ImageLocationY);
+                    }
+                }
+
+                //for (int i = ImageLocationX; i < ParentMap.Width; i++)
+                //{
+                //    bool IsMatch = false;
+                //    for (int j = ImageLocationY; j < ParentMap.Height; j++)
+                //    {
+                //        if (i + ChildMap.Width < ParentMap.Width && j + ChildMap.Height < ParentMap.Height)
+                //        {
+                //            var ParentPixel = ParentMap.GetPixel(i, j);
+                //            bool IsSame = true;
+                //            for (int i2 = 0; i2 < ChildMap.Width; i2++)
+                //            {
+                //                for (int j2 = 0; j2 < ChildMap.Height; j2++)
+                //                {
+                //                    if (ParentMap.GetPixel(i + i2, j + j2) != ChildMap.GetPixel(i2, j2))
+                //                    {
+                //                        IsSame = false;
+                //                        break;
+                //                    }
+                //                }
+                //                if (!IsSame)
+                //                    break;
+                //            }
+                //            if (IsSame)
+                //                return new Point(i, j);
+                //        }
+                //    }
+                //}
+            }
+
+            ParentMap.UnlockBits();
+            ChildMap.UnlockBits();
+
+            return pt;
         }
 
         private void summonerWarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -93,10 +189,13 @@ namespace SummonersWar
             s.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_TestImage.png");
             //Set Timer , CaptureScreen , ToSearch pixel
         }
-
+        
         private void test()
         {
             Bitmap bmpGray = new Bitmap(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Source.png");
+
+            #region stopwatch 1
+
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             for (int i = 0; i < bmpGray.Height; i++)
@@ -111,6 +210,10 @@ namespace SummonersWar
             }
             bmpGray.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\WhatDoesImageDo.png");
             stopwatch.Stop();
+
+            #endregion
+
+            #region stopwatch 2
 
             Stopwatch stopwatch2 = new Stopwatch();
             stopwatch2.Start();
@@ -141,12 +244,16 @@ namespace SummonersWar
             bmpGray.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\WhatDoesImageDo2.png");
             stopwatch2.Stop();
 
+            #endregion
+
+            #region stopwatch 3
+
             Stopwatch stopwatch3 = new Stopwatch();
             stopwatch3.Start();
             bmpGray = new Bitmap(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Source.png");
 
-            //Rectangle rect2 = new Rectangle(1, 1, bmpGray.Width - 2, bmpGray.Height - 2);
-            Rectangle rect2 = new Rectangle(0, 0, bmpGray.Width - 1 , bmpGray.Height - 1);
+            Rectangle rect2 = new Rectangle(1, 1, bmpGray.Width - 2, bmpGray.Height - 2);
+            //Rectangle rect2 = new Rectangle(0, 0, bmpGray.Width - 1 , bmpGray.Height - 1);
             BitmapData bmpData2 = bmpGray.LockBits(rect2, ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             IntPtr ptr2 = bmpData2.Scan0;
             byte[] rgbValues = new byte[rect2.Height * rect2.Width * 3];
@@ -161,6 +268,11 @@ namespace SummonersWar
             bmpGray.UnlockBits(bmpData);
             bmpGray.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\WhatDoesImageDo3.png");
             stopwatch3.Stop();
+
+
+            #endregion
+
+            #region stopwatch 4
 
             Stopwatch stopwatch4 = new Stopwatch();
             stopwatch4.Start();
@@ -191,6 +303,8 @@ namespace SummonersWar
             bmpGray.UnlockBits(bmpData4);
             bmpGray.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\WhatDoesImageDo4.png");
             stopwatch4.Stop();
+
+            #endregion
 
             Console.WriteLine("StopWatch : " + stopwatch.Elapsed.TotalMilliseconds.ToString() + "ms .");
             Console.WriteLine("StopWatch2 : " + stopwatch2.Elapsed.TotalMilliseconds.ToString() + "ms .");

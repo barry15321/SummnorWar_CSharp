@@ -74,6 +74,7 @@
     <Compile Include="hWndList.Designer.cs">
       <DependentUpon>hWndList.cs</DependentUpon>
     </Compile>
+    <Compile Include="LockBitmap.cs" />
     <Compile Include="SummonerAssistant.cs">
       <SubType>Form</SubType>
     </Compile>
