@@ -42,19 +42,23 @@ namespace SummonersWar
             sw.Start();
 
             Point pt = new Point(-1, -1);
-            Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\Source.png");
+            //Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\last.png");
+            //Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\lasts.png");   
+            
+            Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\CaptureScreen.png");
             Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\cyrstal.png");
 
-            pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1, 0);
+            pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, 974, 421);
+            //pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1);
 
             sw.Stop();
 
             Console.WriteLine("StopWatch : " + sw.Elapsed.TotalMilliseconds.ToString() + "ms .");
-            Console.WriteLine("Result : (" + pt.X + " , " + pt.Y + " )");
+            Console.WriteLine("Result : (" + pt.X + " , " + pt.Y + ")");
 
         }
 
-        private Point SearchBitmap(Bitmap ParentBitmap , Bitmap ChildBitmap , int ImageLocationX = -1 , int ImageLocationY = -1 , int Choice = 1)
+        private Point SearchBitmap(Bitmap ParentBitmap , Bitmap ChildBitmap , int ImageLocationX = -1 , int ImageLocationY = -1)
         {
             Point pt = new Point(-1, -1);
 
@@ -63,41 +67,50 @@ namespace SummonersWar
 
             ParentMap.LockBits();
             ChildMap.LockBits();
-
-            if (ImageLocationX == -1 || ImageLocationY == -1)
+            
+            if (ImageLocationX == -1 && ImageLocationY == -1)
             {
+                //Console.WriteLine("Minus one to find.");
+                bool EndSearch = false;
                 for (int i = 0; i < ParentMap.Width; i++)
                 {
-                    bool IsMatch = false;
                     for (int j = 0; j < ParentMap.Height; j++)
                     {
-                        if (i + ChildMap.Width < ParentMap.Width && j + ChildMap.Height < ParentMap.Height)
+                        if (i + ChildMap.Width <= ParentMap.Width && j + ChildMap.Height <= ParentMap.Height)
                         {
-                            var ParentPixel = ParentMap.GetPixel(i, j);
-                            bool IsSame = true;
+                            bool IsMatch = true;
                             for (int i2 = 0; i2 < ChildMap.Width; i2++)
                             {
                                 for (int j2 = 0; j2 < ChildMap.Height; j2++)
                                 {
                                     if (ParentMap.GetPixel(i + i2, j + j2) != ChildMap.GetPixel(i2, j2))
                                     {
-                                        IsSame = false;
+                                        IsMatch = false;
                                         break;
                                     }
                                 }
-                                if (!IsSame)
+                                if (!IsMatch)
                                     break;
                             }
-                            if (IsSame)
-                                return new Point(i, j);
+
+                            if (IsMatch)
+                            {
+                                EndSearch = true;
+                                pt = new Point(i, j);
+                                break;
+                                //return new Point(i, j);
+                            }
                         }
                     }
+
+                    if (EndSearch)
+                        break;
                 }
             }
             else
             {
-                if (ImageLocationX + ChildBitmap.Width < ParentBitmap.Width && ImageLocationY + ChildBitmap.Height < ParentBitmap.Height)
-                {
+                if (ImageLocationX + ChildBitmap.Width <= ParentBitmap.Width && ImageLocationY + ChildBitmap.Height <= ParentBitmap.Height)
+                {                    
                     bool IsMatch = true;
                     for (int i = 0; i < ChildBitmap.Width; i++)
                     {
@@ -113,40 +126,13 @@ namespace SummonersWar
                         if (!IsMatch)
                             break;
                     }
-
+                    
                     if (IsMatch)
                     {
                         return new Point(ImageLocationX, ImageLocationY);
                     }
                 }
-
-                //for (int i = ImageLocationX; i < ParentMap.Width; i++)
-                //{
-                //    bool IsMatch = false;
-                //    for (int j = ImageLocationY; j < ParentMap.Height; j++)
-                //    {
-                //        if (i + ChildMap.Width < ParentMap.Width && j + ChildMap.Height < ParentMap.Height)
-                //        {
-                //            var ParentPixel = ParentMap.GetPixel(i, j);
-                //            bool IsSame = true;
-                //            for (int i2 = 0; i2 < ChildMap.Width; i2++)
-                //            {
-                //                for (int j2 = 0; j2 < ChildMap.Height; j2++)
-                //                {
-                //                    if (ParentMap.GetPixel(i + i2, j + j2) != ChildMap.GetPixel(i2, j2))
-                //                    {
-                //                        IsSame = false;
-                //                        break;
-                //                    }
-                //                }
-                //                if (!IsSame)
-                //                    break;
-                //            }
-                //            if (IsSame)
-                //                return new Point(i, j);
-                //        }
-                //    }
-                //}
+                               
             }
 
             ParentMap.UnlockBits();
