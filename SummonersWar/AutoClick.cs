@@ -46,10 +46,60 @@ namespace SummonersWar
             //Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\lasts.png");   
             
             Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\CaptureScreen.png");
-            Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\cyrstal.png");
+            Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\time.png");
 
-            pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, 974, 421);
-            //pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1);
+            Image img1 = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\pic20x20.png");
+            Image img2 = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\pic21x20.png");
+            LockBitmap map1 = new LockBitmap((Bitmap)img1);
+            LockBitmap map2 = new LockBitmap((Bitmap)img2);
+
+            List<Color> origin = new List<Color>();
+            Bitmap bt = (Bitmap)Source;
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 20; j++)
+                {
+                    var px = bt.GetPixel(i, j);
+                    origin.Add(px);
+                }
+            }
+            Console.WriteLine();
+
+            map1.LockBits();
+            map2.LockBits();
+
+
+            List<Color> mx1 = new List<Color>();
+            List<Color> mx2 = new List<Color>();
+            for (int i = 0; i < map1.Width; i++)
+            {
+                for (int j = 0; j < map1.Height; j++)
+                {
+                    var px = map1.GetPixel(i, j);
+                    var px2 = map2.GetPixel(i, j);
+                    mx1.Add(px);
+                    mx2.Add(px2);
+                    //Console.Write("i = " + i + " , j = " + j + " : ");
+                    //Console.WriteLine(px + "\t\t" + px2);
+                }
+                //Console.WriteLine();
+            }
+
+            map1.UnlockBits();
+            map2.UnlockBits();
+
+
+            map1.ConsolePixel();
+            map2.ConsolePixel();
+
+            Console.WriteLine("origin \t 20x20 \t 21x20");
+            for (int i = 0; i < 20; i++)
+            {
+                Console.WriteLine(origin[i] + " ,, " + mx1[i] + " ,, " + mx2[i]);
+            }
+            Console.WriteLine(mx2[20]);
+            //pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, 959, 400);
+            pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1);
 
             sw.Stop();
 
@@ -61,16 +111,21 @@ namespace SummonersWar
         private Point SearchBitmap(Bitmap ParentBitmap , Bitmap ChildBitmap , int ImageLocationX = -1 , int ImageLocationY = -1)
         {
             Point pt = new Point(-1, -1);
-
+            
             LockBitmap ParentMap = new LockBitmap(ParentBitmap);
             LockBitmap ChildMap = new LockBitmap(ChildBitmap);
 
             ParentMap.LockBits();
             ChildMap.LockBits();
-            
+
+            Console.WriteLine("ParentMap (w * h) : " + ParentMap.Width + " , " + ParentMap.Height);
+            Console.WriteLine("ChildMap (w * h) : " + ChildMap.Width + " , " + ChildMap.Height);
+
+            Console.WriteLine(ChildMap.Pixels.Length);
+
             if (ImageLocationX == -1 && ImageLocationY == -1)
             {
-                //Console.WriteLine("Minus one to find.");
+                Console.WriteLine("Minus one to find.");
                 bool EndSearch = false;
                 for (int i = 0; i < ParentMap.Width; i++)
                 {

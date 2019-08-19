@@ -161,4 +161,13 @@ public class LockBitmap
             Pixels[i] = color.B;
         }
     }
+
+    public void ConsolePixel()
+    {
+        Console.WriteLine("Pixel ,  width = " + Width + " , height  " + Height + " , Depth : " + Depth);
+        for (int i = 0; i < Pixels.Length; i+=3)
+        {
+            Console.WriteLine("i = " + i / 3 + " ,, " + Pixels[i + 2] + " , " + Pixels[i + 1] + " , " + Pixels[i]);
+        }
+    }
 }
