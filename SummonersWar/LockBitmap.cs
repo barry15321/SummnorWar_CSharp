@@ -165,9 +165,25 @@ public class LockBitmap
     public void ConsolePixel()
     {
         Console.WriteLine("Pixel ,  width = " + Width + " , height  " + Height + " , Depth : " + Depth);
-        for (int i = 0; i < Pixels.Length; i+=3)
+
+        int Counter = 0;
+        for (int i = 0; i < Pixels.Length; i++)
         {
-            Console.WriteLine("i = " + i / 3 + " ,, " + Pixels[i + 2] + " , " + Pixels[i + 1] + " , " + Pixels[i]);
+            if (Counter == 0)
+            {
+                Console.Write("i = " + i / 3 + " : ");
+            }
+
+            Console.Write(Pixels[i] + " ");
+            //Console.Write("i = " + i + " : " + Pixels[i]);
+            Counter++;
+
+            if (Counter == 3)
+            {
+                Console.WriteLine();
+                Counter = 0;
+            }
+
         }
     }
 }
