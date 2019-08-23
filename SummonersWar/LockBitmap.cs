@@ -12,15 +12,18 @@ public class LockBitmap
     Bitmap source = null;
     IntPtr Iptr = IntPtr.Zero;
     BitmapData bitmapData = null;
+    bool IsCorrectArray;
 
     public byte[] Pixels { get; set; }
     public int Depth { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
+   
 
-    public LockBitmap(Bitmap source)
+    public LockBitmap(Bitmap source , bool IsCorrectArray)
     {
         this.source = source;
+        this.IsCorrectArray = IsCorrectArray;
     }
 
     /// <summary>
@@ -35,7 +38,8 @@ public class LockBitmap
             Height = source.Height;
 
             // get total locked pixels count
-            int PixelCount = Width * Height;
+            int offset = (IsCorrectArray == true) ? 0 : Width * (Width % 4);
+            int PixelCount = Width * Height + offset;
 
             // Create rectangle to lock
             Rectangle rect = new Rectangle(0, 0, Width, Height);
@@ -96,10 +100,11 @@ public class LockBitmap
         Color clr = Color.Empty;
 
         // Get color components count
+        int offset = (IsCorrectArray == true) ? 0 : (Width % 4) * y;
         int cCount = Depth / 8;
 
         // Get start index of the specified pixel
-        int i = ((y * Width) + x) * cCount;
+        int i = ((y * Width) + x) * cCount + offset;
 
         if (i > Pixels.Length - cCount)
             throw new IndexOutOfRangeException();
@@ -137,10 +142,11 @@ public class LockBitmap
     public void SetPixel(int x, int y, Color color)
     {
         // Get color components count
+        int offset = (IsCorrectArray == true) ? 0 : (Width % 4) * y;
         int cCount = Depth / 8;
 
         // Get start index of the specified pixel
-        int i = ((y * Width) + x) * cCount;
+        int i = ((y * Width) + x) * cCount + offset;
 
         if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
         {
@@ -161,29 +167,5 @@ public class LockBitmap
             Pixels[i] = color.B;
         }
     }
-
-    public void ConsolePixel()
-    {
-        Console.WriteLine("Pixel ,  width = " + Width + " , height  " + Height + " , Depth : " + Depth);
-
-        int Counter = 0;
-        for (int i = 0; i < Pixels.Length; i++)
-        {
-            if (Counter == 0)
-            {
-                Console.Write("i = " + i / 3 + " : ");
-            }
-
-            Console.Write(Pixels[i] + " ");
-            //Console.Write("i = " + i + " : " + Pixels[i]);
-            Counter++;
-
-            if (Counter == 3)
-            {
-                Console.WriteLine();
-                Counter = 0;
-            }
-
-        }
-    }
+    
 }

@@ -45,67 +45,12 @@ namespace SummonersWar
 
             Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\CaptureScreen.png");
             Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\time.png");
-
+            
             Image img1 = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\pic20x20.png");
             Image img2 = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\pic22x20.png");
             Image copy = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\copy.png");
-            //Image img2 = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\pic21x20.png");
-            LockBitmap map1 = new LockBitmap((Bitmap)img1);
-            LockBitmap map2 = new LockBitmap((Bitmap)img2);
-
-            List<Color> origin = new List<Color>();
-            List<Color> mx1 = new List<Color>();
-            List<Color> mx2 = new List<Color>();
-
-            Bitmap m = (Bitmap)copy;
-            for (int i = 0; i < 22; i++)
-            {
-                m.SetPixel(i, 0, Color.White);
-            }
-            m.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\save.png");
-
-            Bitmap bt = (Bitmap)Source;
-            for (int j = 0; j < 22; j++)
-            {
-                var px = bt.GetPixel(j, 0);
-                origin.Add(px);
-            }
-            for (int j = 0; j < 22; j++)
-            {
-                var px = bt.GetPixel(j, 1);
-                origin.Add(px);
-            }
-
-            map1.LockBits();
-            map2.LockBits();
-
-            for (int j = 0; j < map1.Height; j++)
-            {
-                var px = map1.GetPixel(0, j);
-                var px2 = map2.GetPixel(0, j);
-                mx1.Add(px);
-                mx2.Add(px2);
-            }
-
-            map2.ConsolePixel();
-
-            map1.UnlockBits();
-            map2.UnlockBits();
-
-            Console.WriteLine("origin : ");
-            for (int i = 0; i < origin.Count; i++)
-            {
-                Console.WriteLine("i = " + i + " : " + origin[i]);
-            }
-
-            //Console.WriteLine("origin \t 20x20 \t 21x20");
-            //for (int i = 0; i < 20; i++)
-            //{
-            //    Console.WriteLine("i = " + i + " : " + origin[i] + " ,, " + mx1[i] + " ,, " + mx2[i]);
-            //}
-            //Console.WriteLine(mx2[20]);
-            //pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, 959, 400);
-
+            
+            //pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, 1109, 86);
             pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1);
 
             sw.Stop();
@@ -119,8 +64,8 @@ namespace SummonersWar
         {
             Point pt = new Point(-1, -1);
 
-            LockBitmap ParentMap = new LockBitmap(ParentBitmap);
-            LockBitmap ChildMap = new LockBitmap(ChildBitmap);
+            LockBitmap ParentMap = new LockBitmap(ParentBitmap , true);
+            LockBitmap ChildMap = new LockBitmap(ChildBitmap, false);
 
             ParentMap.LockBits();
             ChildMap.LockBits();
@@ -175,6 +120,8 @@ namespace SummonersWar
                         {
                             if (ParentMap.GetPixel(ImageLocationX + i, ImageLocationY + j) != ChildMap.GetPixel(i, j))
                             {
+                                Console.WriteLine("i = " + i + " , j = " + j + " , i+i2 = " + (i + ImageLocationX) + " , j+j2 = " + (j + ImageLocationY));
+                                Console.WriteLine(ParentMap.GetPixel(ImageLocationX + i, ImageLocationY + j) + " , " + ChildMap.GetPixel(i, j));
                                 IsMatch = false;
                                 break;
                             }
