@@ -28,8 +28,9 @@ public class WindowClass
     static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
     [DllImport("user32.dll")]
-    public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-        
+    //public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+    public static extern IntPtr FindWindowExA(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+     
     [DllImport("user32.dll")]
     //private static extern int GetWindowRect(IntPtr hwnd, out lpRect);
     public static extern Boolean GetWindowRect(IntPtr hWnd, out RECT lpRect);
@@ -114,7 +115,7 @@ public class WindowClass
 
     public IntPtr ToFindWindowEx(IntPtr ParentHwnd , IntPtr Childhwnd , string lpszClassStr , string lpszWindowStr)
     {
-        return FindWindowEx(ParentHwnd, Childhwnd, lpszClassStr, lpszWindowStr);
+        return FindWindowExA(ParentHwnd, Childhwnd, lpszClassStr, lpszWindowStr);
     }
 
     public string ToGetWindowTitleText(IntPtr hwnd)

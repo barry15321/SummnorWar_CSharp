@@ -75,6 +75,7 @@
       <DependentUpon>hWndList.cs</DependentUpon>
     </Compile>
     <Compile Include="LockBitmap.cs" />
+    <Compile Include="SearchImage.cs" />
     <Compile Include="SummonerAssistant.cs">
       <SubType>Form</SubType>
     </Compile>

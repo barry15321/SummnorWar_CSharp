@@ -165,10 +165,4 @@ public class ScreenCapture
 
     }
 
-    public Point SearchingImagePixel(Image ParentImage, Image ChildImage, int StartSearchingX = -1, int StartSearchingY = -1)
-    { 
-        Point flag = new Point(-1, -1);
-
-        return flag;
-    }
 }

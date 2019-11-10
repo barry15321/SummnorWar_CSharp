@@ -40,9 +40,9 @@
             this.BStatus = new System.Windows.Forms.Label();
             this.ATStatusLabel = new System.Windows.Forms.Label();
             this.BStatusLabel = new System.Windows.Forms.Label();
-            this.CheckBSRunningTimer = new System.Windows.Forms.Timer(this.components);
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.BSRunningTimer = new System.Windows.Forms.Timer(this.components);
             this.CompareImageTimer = new System.Windows.Forms.Timer(this.components);
+            this.SimulateClickTimer = new System.Windows.Forms.Timer(this.components);
             this.ToolMenu.SuspendLayout();
             this.InfoTable.SuspendLayout();
             this.SuspendLayout();
@@ -141,15 +141,16 @@
             this.BStatusLabel.TabIndex = 2;
             this.BStatusLabel.Text = "BlueStack Status : ";
             // 
-            // CheckBSRunningTimer
+            // BSRunningTimer
             // 
-            this.CheckBSRunningTimer.Interval = 500;
-            this.CheckBSRunningTimer.Tick += new System.EventHandler(this.CheckBSRunningTimer_Tick);
+            this.BSRunningTimer.Enabled = true;
+            this.BSRunningTimer.Interval = 500;
+            this.BSRunningTimer.Tick += new System.EventHandler(this.BSRunningTimer_Tick);
             // 
-            // CompareImageTimer
+            // SimulateClickTimer
             // 
-            this.CompareImageTimer.Interval = 300;
-            this.CompareImageTimer.Tick += new System.EventHandler(this.CompareImageTimer_Tick);
+            this.SimulateClickTimer.Interval = 250;
+            this.SimulateClickTimer.Tick += new System.EventHandler(this.SimulateClickTimer_Tick);
             // 
             // AutoClick
             // 
@@ -187,9 +188,9 @@
         private System.Windows.Forms.Label BStatus;
         private System.Windows.Forms.Label ATStatusLabel;
         private System.Windows.Forms.ToolStripMenuItem summonerWarToolStripMenuItem;
-        private System.Windows.Forms.Timer CheckBSRunningTimer;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer BSRunningTimer;
         private System.Windows.Forms.Timer CompareImageTimer;
+        private System.Windows.Forms.Timer SimulateClickTimer;
     }
 }
 

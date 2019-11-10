@@ -18,12 +18,11 @@ public class LockBitmap
     public int Depth { get; private set; }
     public int Width { get; private set; }
     public int Height { get; private set; }
-   
+    private bool IsFixEmptyPixel = false;
 
-    public LockBitmap(Bitmap source , bool IsCorrectArray)
+    public LockBitmap(Bitmap source)
     {
         this.source = source;
-        this.IsCorrectArray = IsCorrectArray;
     }
 
     /// <summary>
@@ -38,8 +37,6 @@ public class LockBitmap
             Height = source.Height;
 
             // get total locked pixels count
-            int offset = (IsCorrectArray == true) ? 0 : Width * (Width % 4);
-            int PixelCount = Width * Height + offset;
 
             // Create rectangle to lock
             Rectangle rect = new Rectangle(0, 0, Width, Height);
@@ -57,9 +54,12 @@ public class LockBitmap
             bitmapData = source.LockBits(rect, ImageLockMode.ReadWrite, source.PixelFormat);
 
             // create byte array to copy pixel values
-            int step = Depth / 8;
-            Pixels = new byte[PixelCount * step];
+            Pixels = new byte[bitmapData.Stride * bitmapData.Height];
+            //Pixels = new byte[PixelCount * Depth / 8];
             Iptr = bitmapData.Scan0;
+            
+            if (bitmapData.Stride != bitmapData.Width * Depth / 8)
+                IsFixEmptyPixel = true;
 
             // Copy data from pointer to array
             Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
@@ -97,16 +97,13 @@ public class LockBitmap
     /// <returns></returns>
     public Color GetPixel(int x, int y)
     {
+        // Get color components count     
         Color clr = Color.Empty;
-
-        // Get color components count
-        int offset = (IsCorrectArray == true) ? 0 : (Width % 4) * y;
-        int cCount = Depth / 8;
-
+        
         // Get start index of the specified pixel
-        int i = ((y * Width) + x) * cCount + offset;
+        int i = (y * bitmapData.Stride) + (x * Depth / 8);
 
-        if (i > Pixels.Length - cCount)
+        if (i > Pixels.Length)
             throw new IndexOutOfRangeException();
 
         if (Depth == 32) // For 32 bpp get Red, Green, Blue and Alpha
@@ -142,11 +139,9 @@ public class LockBitmap
     public void SetPixel(int x, int y, Color color)
     {
         // Get color components count
-        int offset = (IsCorrectArray == true) ? 0 : (Width % 4) * y;
-        int cCount = Depth / 8;
 
         // Get start index of the specified pixel
-        int i = ((y * Width) + x) * cCount + offset;
+        int i = (y * bitmapData.Stride) + (x * Depth / 8);
 
         if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
         {
