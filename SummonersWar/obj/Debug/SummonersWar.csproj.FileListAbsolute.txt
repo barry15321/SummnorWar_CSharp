@@ -55,4 +55,15 @@ C:\Users\AUTIO\Desktop\SummnorWar_CSharp-master\SummonersWar\obj\Debug\Summoners
 C:\Users\AUTIO\Desktop\SummnorWar_CSharp-master\SummonersWar\obj\Debug\SummonersWar.csproj.CoreCompileInputs.cache
 C:\Users\AUTIO\Desktop\SummnorWar_CSharp-master\SummonersWar\obj\Debug\SummonersWar.exe
 C:\Users\AUTIO\Desktop\SummnorWar_CSharp-master\SummonersWar\obj\Debug\SummonersWar.pdb
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\bin\Debug\SummonersWar.exe.config
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.exe
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.pdb
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\bin\Debug\SummonersWar.exe
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\bin\Debug\SummonersWar.pdb
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csprojResolveAssemblyReference.cache
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.AutoClick.resources
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.hWndList.resources
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.Properties.Resources.resources
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.SummonerAssistant.resources
+C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csproj.GenerateResource.Cache
 C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csprojResolveAssemblyReference.cache

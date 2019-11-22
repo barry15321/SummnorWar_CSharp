@@ -21,18 +21,16 @@ namespace SummonersWar
         SearchImage Search = new SearchImage();
         MessageHandlingClass Message = new MessageHandlingClass();
 
-        List<IntPtr> AssistantUnderPtr = new List<IntPtr>();
+        int Index = 0;
         bool IsAssistantWorking = false;
-        int IndexCounter = 0;
         IntPtr AssistantHwnd = IntPtr.Zero;
 
         GlobalKeyboardHook hk;
-        List<Image> ClipImage = new List<Image>();
+        List<Image> Clip = new List<Image>();
         List<Point> ClipSearchPoints = new List<Point>();
         List<IntPtr> AssistantWindowHwndList = new List<IntPtr>();
-
         // Bluestack 1280 * 720
-
+        IntPtr BlueStackHwnd = IntPtr.Zero;
         public enum KeyBoardEventsFlag
         {
             WM_KEYDOWN = 0x100,
@@ -69,15 +67,31 @@ namespace SummonersWar
         public AutoClick()
         {
             InitializeComponent();
-            keyboardhooking();
-            ClipImageLoadFunction();
+            InitializeAutoClickFunction();
         }
 
-        /// <summary>
-        /// Summoner's War Assistant
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        private void InitializeAutoClickFunction()
+        {
+            hk = new GlobalKeyboardHook();
+            hk.KeyDown += new KeyEventHandler(gHook_KeyDown);
+            hk.KeyUp += new KeyEventHandler(gHook_KeyUp);
+
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+                hk.HookedKeys.Add(key);
+
+            hk.hook();
+            //Full Area keyboardhooking
+
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\467447_Step1.png")); ClipSearchPoints.Add(new Point(467, 447));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\678671_Step2_1.png")); ClipSearchPoints.Add(new Point(678, 671));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\612352_unknownbook_Step2_2.png")); ClipSearchPoints.Add(new Point(612, 352));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\602305_Step2_3.png")); ClipSearchPoints.Add(new Point(602, 305));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\1078676_Step3.png")); ClipSearchPoints.Add(new Point(1078, 676));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\772647_notsure_book.png")); ClipSearchPoints.Add(new Point(772, 647));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\775691_monsterck.png")); ClipSearchPoints.Add(new Point(775, 691));
+            // Capture Image , Points add into List
+        }
+
         private void listHwndToolStripMenuItem_Click(object sender, EventArgs e) 
         {
             hWndList hwnd = new hWndList();
@@ -85,33 +99,12 @@ namespace SummonersWar
             hwnd.Show();
         }
 
-        private void CloseBtn_Click(object sender, EventArgs e)
-        {
-            //test();
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Reset();
-            sw.Start();
-
-            Point pt = new Point(-1, -1);
-
-            Image Source = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\CaptureScreen.png");
-            Image SubImg = Image.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\cyrstal.png");
-                        
-            //pt = SearchBitmap((Bitmap)Source, (Bitmap)SubImg, 1109, 86);
-            pt = Search.SearchBitmap((Bitmap)Source, (Bitmap)SubImg, -1, -1);
-
-            sw.Stop();
-
-            Console.WriteLine("StopWatch : " + sw.Elapsed.TotalMilliseconds.ToString() + "ms .");
-            Console.WriteLine("Result : (" + pt.X + " , " + pt.Y + ")");
-
-        }
-                
         private void summonerWarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!IsAssistantWorking)
             {
                 IntPtr TargetHwnd = BasicWindow.ToFindWindow("BlueStacks");
+                BlueStackHwnd = TargetHwnd;
 
                 WindowClass.RECT rect = BasicWindow.ToGetWindowRect(TargetHwnd);
 
@@ -121,13 +114,10 @@ namespace SummonersWar
                     SummonerAssistant Assistant = new SummonerAssistant(TargetHwnd, rect);
                     AssistantHwnd = Assistant.Handle;
                     Assistant.Show();
-                    
-                    AssistantWindowHwndList = EnumWindowsList(AssistantHwnd);
-                    foreach (IntPtr p in AssistantWindowHwndList)
-                    {
-                        Console.WriteLine("ptr : " + p.ToString());
-                        Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYDOWN, (int)Keys.C, 0);
-                    }
+
+                    AssistantWindowHwndList = EnumWindowsList(TargetHwnd);
+                    //for (int i = 0; i < AssistantWindowHwndList.Count; i++)
+                    //    Console.WriteLine(AssistantWindowHwndList[i]);
                 }
                 else
                 {
@@ -136,53 +126,103 @@ namespace SummonersWar
             }
         }
 
-        private void BSRunningTimer_Tick(object sender, EventArgs e)
+        private void CloseBtn_Click(object sender, EventArgs e)
         {
-            IntPtr ptr = BasicWindow.ToFindWindow("BlueStacks");
-            if (ptr != IntPtr.Zero)
-                BStatus.Text = "BlueStacks is Running ... ";
-            else
-                BStatus.Text = "BlueStacks is Closed.";
+            //help me get this problem
+            
+
+            List<Color> wrongpixel = new List<Color>();
+            List<Point> wrongpoint = new List<Point>();
+
+            List<Color> imgpx = new List<Color>();
+            List<Color> lockpx = new List<Color>();
+            Image src_img = Image.FromFile(Environment.CurrentDirectory + "\\SourceMax\\2019-11-17-08-27-28_Image.png");
+            Image clip_img = Image.FromFile(Environment.CurrentDirectory + "\\ClipMax\\772647_notsure_book.png");
+            Bitmap lock_img = (Bitmap)clip_img.Clone();
+
+            Point pr = Search.SearchLockBitmap((Bitmap)src_img.Clone() , (Bitmap)clip_img.Clone());
+            Point ptr = Search.BitmapPixelSearch((Bitmap)src_img.Clone(), (Bitmap)clip_img.Clone());
+
+            Console.WriteLine(pr.X + " , " + pr.Y);
+            Console.WriteLine(ptr.X + " , " + ptr.Y);
+            //int x = 785;
+            //int y = 665;
+            //LockBitmap lockbmp = new LockBitmap(lock_img);
+            //lockbmp.LockBits();
+            //for (int i = 0; i < clip_img.Width; i++)
+            //{
+            //    for (int j = 0; j < clip_img.Height; j++)
+            //    {
+            //        if (((Bitmap)src_img).GetPixel(i + x, j + y) != lockbmp.GetPixel(i, j))
+            //        {
+            //            wrongpoint.Add(new Point(i, j));
+            //        }
+            //    }
+            //}
+
+            //lockbmp.UnlockBits();
+
+            //Console.WriteLine("wrong pixel counts : " + wrongpoint.Count);
+            //for (int i = 0; i < wrongpoint.Count; i++)
+            //{
+            //    Console.WriteLine(wrongpoint[i]);
+            //}
         }
-        
+               
         private void gHook_KeyDown(object sender, KeyEventArgs e)
         {
             switch ((int)e.KeyValue)
             {
-                case 112: //F1
-                    this.Text = "Index = " + IndexCounter.ToString() + " , Send Click Events. ";
-                    SendClickEvents(IndexCounter);
+                /// Buttom 'F1'
+                /// Send ClickEvents ('A' + Index) to Assistant
+                case 112:
+                    this.Text = "Index = " + Index.ToString() + " , Send Click Events. ";
+                    SendClickEvents(Index);                    
                     break;
-                case 113: //F2
-                    Point pt = SearchImage(ClipImage[IndexCounter], -1, -1);
-                    Point ptr = SearchImage(ClipImage[IndexCounter], ClipSearchPoints[IndexCounter].X, ClipSearchPoints[IndexCounter].Y);
-                    this.Text = "Index = " + IndexCounter.ToString() + " , Point Console : " + pt.X.ToString() + " , " + pt.Y.ToString();
-                    Console.WriteLine("Index = " + IndexCounter.ToString() + " , Point -1 Console : " + pt.X.ToString() + " , " + pt.Y.ToString());
+                /// Buttom 'F2'
+                /// Search Assistant image with Clip[Index]
+                case 113:
+                    Point pt = SearchImage(Clip[Index], -1, -1);
+                    Point ptr = SearchImage(Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
 
-                    if (pt.X != -1 && pt.Y != -1)
-                        SendClickEvents(IndexCounter);                    
+                    //if (pt.X != -1 && pt.Y != -1)
+                    //    SendClickEvents(Index);
+                    //if (ptr.X != -1 && ptr.Y != -1)
+                    //    SendClickEvents(Index);
                     break;
-                case 114: //F3
-                    SaveImageFunction();
-                    this.Text = "Image Saved , Location : " + Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToString() + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss").ToString() + "_TestImage.png";
+                /// Buttom 'F3'
+                    /// Save current Assistant image
+                case 114:
+                    Image Picture = CaptureScreen.CapturehWndWindow(AssistantHwnd);
+                    Picture.Save(Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
+                    Console.WriteLine("Image has been saved at : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
+                    this.Text = "Image has been saved at : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss").ToString() + "_Image.png";
                     break;
-                case 115: //F4
-                    IndexCounter = 0;
-                    this.Text = "Index = " + IndexCounter.ToString();
+                /// Buttom 'F4'
+                /// Set Index to 0
+                case 115: //F4 , Set IndexCounter => 0
+                    Index = 0;
+                    this.Text = "Index = " + Index.ToString();
                     break;
-                case 116: //F5
-                    IndexCounter++;
-                    this.Text = "Add index , Index = " + IndexCounter.ToString();
+                /// Buttom 'F5'
+                /// Set Index += 1
+                case 116:
+                    Index++;
+                    this.Text = "Add index , Index = " + Index.ToString();
                     break;
-                //
-                case 117: //F6
+                /// Buttom 'F6'
+                /// 
+                case 117:
                     break;
-                //    
-                case 118: //F7
+                /// Buttom 'F7'  
+                /// Timer Start.
+                case 118:
                     SimulateClickTimer.Start();
                     this.Text = "AutoClick Start.";
                     break;
-                case 119: //F8
+                /// Buttom 'F8'  
+                /// Timer Stop.
+                case 119: 
                     SimulateClickTimer.Stop();
                     this.Text = "AutoClick Stop.";
                     break;
@@ -191,7 +231,10 @@ namespace SummonersWar
 
         private void gHook_KeyUp(object sender, KeyEventArgs e)
         {
+            switch (e.KeyValue)
+            {
 
+            }
         }
 
         private List<IntPtr> EnumWindowsList(IntPtr ptr)
@@ -208,136 +251,146 @@ namespace SummonersWar
 
             return list;
         }
-        
-        /// <summary>
-        /// HookedKeys Initital function
-        /// </summary>
-        private void keyboardhooking()
-        {
-            hk = new GlobalKeyboardHook();
-            hk.KeyDown += new KeyEventHandler(gHook_KeyDown);
-            hk.KeyUp += new KeyEventHandler(gHook_KeyUp);
-
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
-                hk.HookedKeys.Add(key);
-            
-            hk.hook();
-        }
-
-        private int MakeParam(int key , int lparam)
-        {
-            return key + (lparam << 16);
-        }
-
-        private void SaveImageFunction()
-        {
-            Image pic = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-            pic.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_TestImage.png");
-
-            Console.WriteLine("Image Saved at : " + Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_TestImage.png");
-        }
 
         private Point SearchImage(Image SearchImg , int x , int y)
         {
-            Image pic = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-            Console.WriteLine("Recieve Point : " + x + " , " + y);
-
             ///Point pt = Search.SearchBitmap((Bitmap)pic, (Bitmap)src); Memory Locked.
-            Point pt = Search.SearchBitmap((Bitmap)pic.Clone(), (Bitmap)SearchImg.Clone(), x, y);
-            
-            Console.WriteLine("pt : " + pt.X + " , " + pt.Y);
-            Console.WriteLine();
+            Image pic = CaptureScreen.CapturehWndWindow(AssistantHwnd);
 
+            Point pt = Search.SearchLockBitmap((Bitmap)pic.Clone(), (Bitmap)SearchImg.Clone(), x, y);
+            Point bpt = Search.BitmapPixelSearch((Bitmap)pic, (Bitmap)SearchImg, x, y);
+
+            Console.WriteLine("Recieve Point : " + x + " , " + y + " . Result : " + pt.X + " , " + pt.Y);
+            Console.WriteLine("Recieve Bitmap Point : " + x + " , " + y + " . Result : " + bpt.X + " , " + bpt.Y);
+            Console.WriteLine();
+            
+            pic.Dispose();
             return pt;
         }
         
-        private void ClipImageLoadFunction()
-        {
-            ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\315404_BlueCrystal.png")); // blue
-            ClipSearchPoints.Add(new Point(315, 404));
-            ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\638413_Flash.png")); // flash
-            ClipSearchPoints.Add(new Point(638, 413));
-            ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\946410_RedCrystal.png")); // crystal
-            ClipSearchPoints.Add(new Point(946, 410));
-            ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\472635_sellblue.png"));
-            ClipSearchPoints.Add(new Point(472, 635));
-            ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\598594_confirm.png"));
-            ClipSearchPoints.Add(new Point(598, 594));
-            ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\311420_again.png"));
-            ClipSearchPoints.Add(new Point(311, 420));
-
-            //ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\315404_BlueCrystal.png")); // blue
-            //ClipSearchPoints.Add(new Point(-1, -1));
-            //ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\638413_Flash.png")); // flash
-            //ClipSearchPoints.Add(new Point(638, 413));
-            //ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\946410_RedCrystal.png")); // crystal
-            //ClipSearchPoints.Add(new Point(-1, -1));
-            //ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\472635_sellblue_copy.png"));
-            //ClipSearchPoints.Add(new Point(-1, -1));
-            //ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\598594_confirm_copy.png"));
-            //ClipSearchPoints.Add(new Point(-1, -1));
-            //ClipImage.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Clip\\311420_again_copy.png"));
-            //ClipSearchPoints.Add(new Point(-1, -1));
-
-            Console.WriteLine("Image loaded.");
-        }
-
         private void SendClickEvents(int KeyOptions)
         {
             int KeyValue = (int)Keys.A + KeyOptions;
-            foreach (IntPtr p in AssistantWindowHwndList)
+
+            switch (KeyOptions)
             {
-                Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
-                Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                    KeyValue = (int)Keys.A + KeyOptions;
+                    break;
+                case 4:
+                    KeyValue = (int)Keys.A + KeyOptions - 1;
+                    break;
             }
-            Console.WriteLine("Assistance loop press.");
+
+            IntPtr ptr = BlueStackHwnd;
+            for (int i = 0; i < 3; i++)
+            {
+                Message.ToPostMessage(ptr, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
+                Message.ToPostMessage(ptr, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
+                ptr = BasicWindow.ToFindWindowEx(ptr, IntPtr.Zero, null, null);
+            }
+
+            //int KeyValue = (int)Keys.A + KeyOptions;
+            //foreach (IntPtr p in AssistantWindowHwndList)
+            //{
+            //    Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
+            //    Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
+            //}
+            Console.WriteLine("SendClick " + (Char)KeyValue + " pressed.");
         }
 
         private void SimulateClickTimer_Tick(object sender, EventArgs e)
         {
             Image Source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-
-            Point Result = Search.SearchBitmap((Bitmap)Source, (Bitmap)ClipImage[IndexCounter], -1, -1);
+            Bitmap src = (Bitmap)Source.Clone(), compare = (Bitmap)Clip[Index].Clone();
+            Point Result = Search.BitmapPixelSearch(src, compare, ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+            //Point Result = Search.SearchLockBitmap((Bitmap)Source.Clone(), (Bitmap)Clip[Index].Clone(), ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);            
+            // Memory problem.
 
             if (Result.X == -1 && Result.Y == -1)
-                this.Text = "AutoClick Searching Failure , Index = " + IndexCounter.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+                this.Text = "AutoClick Searching Failure , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
             else
             {
-                this.Text = "AutoClick Searching Success , Index = " + IndexCounter.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+                this.Text = "AutoClick Searching Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
 
-                SendClickEvents(IndexCounter);
-                switch (IndexCounter)
+                SendClickEvents(Index);
+                Thread.Sleep(400);
+                switch (Index)
                 {
                     case 0:
                         Thread.Sleep(200);
-                        SendClickEvents(IndexCounter);
+                        SendClickEvents(Index);
                         Thread.Sleep(400);
-                        SendClickEvents(IndexCounter);
-                        Thread.Sleep(600);
-                        SendClickEvents(IndexCounter);
+                        SendClickEvents(Index);
+                        Thread.Sleep(400);
+                        SendClickEvents(Index);
 
+                        Thread.Sleep(1800);
+                        SendClickEvents(1);
+                        Thread.Sleep(1200);
+                        SendClickEvents(2);
+
+                        Index = 4;
                         //Image SubScreen = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-                        //Point SubResult = Search.SearchBitmap((Bitmap)SubScreen, (Bitmap)ClipImage[1], -1, -1);
-                        //if (SubResult.X == -1 && SubResult.Y == -1) // check
-                        //{
+                        //Point SubResult = new Point(-1, -1);
 
+                        //int BreakPointer = 0;
+                        //for (int i = 1; i < 4; i++)
+                        //{
+                        //    //SubResult = Search.SearchLockBitmap((Bitmap)SubScreen.Clone(), (Bitmap)Clip[i].Clone(), ClipSearchPoints[i].X, ClipSearchPoints[i].Y);
+                        //    SubResult = Search.BitmapPixelSearch((Bitmap)SubScreen.Clone(), (Bitmap)Clip[i].Clone(), ClipSearchPoints[i].X, ClipSearchPoints[i].Y);
+
+                        //    if (SubResult != new Point(-1, -1))
+                        //    {
+                        //        BreakPointer = i;
+                        //        break;
+                        //    }
+                        //    Thread.Sleep(100);
                         //}
-                        //else // equal to sell
-                        //{
+                        //SubScreen.Dispose();
 
-                        //}                        
+                        //switch (BreakPointer)
+                        //{
+                        //    case 1:
+                        //        Index = 1;
+                        //        break;
+                        //    case 2:
+                        //    case 3:
+                        //        Index = 2;
+                        //        break;
+                        //    default:
+                        //        SimulateClickTimer.Stop();
+                        //        this.Text = "Timer Stop , system didnt find out next target after Clip[0]";
+                        //        break;
+                        //}
                         break;
                     case 1:
-                        break;
                     case 2:
-                        break;
                     case 3:
+                        Index = 4;
                         break;
                     case 4:
+                        Index = 0;
                         break;
                 }
+                Thread.Sleep(400);
             }
+
+            Source.Dispose();
+            src.Dispose();
+            compare.Dispose();
         }
         
+        private void BSRunningTimer_Tick(object sender, EventArgs e)
+        {
+            IntPtr ptr = BasicWindow.ToFindWindow("BlueStacks");
+            if (ptr != IntPtr.Zero)
+                BStatus.Text = "BlueStacks is Running ... ";
+            else
+                BStatus.Text = "BlueStacks is Closed.";
+        }
     }
 }

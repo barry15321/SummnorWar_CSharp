@@ -149,7 +149,6 @@
             // 
             // SimulateClickTimer
             // 
-            this.SimulateClickTimer.Interval = 250;
             this.SimulateClickTimer.Tick += new System.EventHandler(this.SimulateClickTimer_Tick);
             // 
             // AutoClick

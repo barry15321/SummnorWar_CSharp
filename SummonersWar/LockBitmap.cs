@@ -12,7 +12,6 @@ public class LockBitmap
     Bitmap source = null;
     IntPtr Iptr = IntPtr.Zero;
     BitmapData bitmapData = null;
-    bool IsCorrectArray;
 
     public byte[] Pixels { get; set; }
     public int Depth { get; private set; }
