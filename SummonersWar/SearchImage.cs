@@ -95,7 +95,7 @@ class SearchImage
         return pt;
     }
 
-    public Point BitmapPixelSearch(Bitmap Source, Bitmap Target, int LocationX = -1, int LocationY = -1)
+    public Point SearchPixelBitmap(Bitmap Source, Bitmap Target, int LocationX = -1, int LocationY = -1)
     {
         Point pt = new Point(-1, -1);
         

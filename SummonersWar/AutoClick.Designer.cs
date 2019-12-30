@@ -166,6 +166,7 @@
             this.MaximizeBox = false;
             this.Name = "AutoClick";
             this.Text = "  AutoClicker";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoClick_FormClosing);
             this.ToolMenu.ResumeLayout(false);
             this.ToolMenu.PerformLayout();
             this.InfoTable.ResumeLayout(false);

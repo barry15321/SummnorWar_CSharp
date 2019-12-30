@@ -82,13 +82,20 @@ namespace SummonersWar
             hk.hook();
             //Full Area keyboardhooking
 
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\467447_Step1.png")); ClipSearchPoints.Add(new Point(467, 447));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\678671_Step2_1.png")); ClipSearchPoints.Add(new Point(678, 671));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\612352_unknownbook_Step2_2.png")); ClipSearchPoints.Add(new Point(612, 352));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\602305_Step2_3.png")); ClipSearchPoints.Add(new Point(602, 305));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\1078676_Step3.png")); ClipSearchPoints.Add(new Point(1078, 676));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\772647_notsure_book.png")); ClipSearchPoints.Add(new Point(772, 647));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\775691_monsterck.png")); ClipSearchPoints.Add(new Point(775, 691));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Crystal.png")); ClipSearchPoints.Add(new Point(1165, 446));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\AgainButton.png")); ClipSearchPoints.Add(new Point(375, 456));
+
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\467447_Step1.png")); ClipSearchPoints.Add(new Point(467, 447));
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\678671_Step2_1.png")); ClipSearchPoints.Add(new Point(678, 671));
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\612352_unknownbook_Step2_2.png")); ClipSearchPoints.Add(new Point(612, 352));
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\602305_Step2_3.png")); ClipSearchPoints.Add(new Point(602, 305));
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\1078676_Step3.png")); ClipSearchPoints.Add(new Point(1078, 676));
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\772647_notsure_book.png")); ClipSearchPoints.Add(new Point(772, 647));
+            //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\775691_monsterck.png")); ClipSearchPoints.Add(new Point(775, 691));
+
             // Capture Image , Points add into List
         }
 
@@ -141,7 +148,7 @@ namespace SummonersWar
             Bitmap lock_img = (Bitmap)clip_img.Clone();
 
             Point pr = Search.SearchLockBitmap((Bitmap)src_img.Clone() , (Bitmap)clip_img.Clone());
-            Point ptr = Search.BitmapPixelSearch((Bitmap)src_img.Clone(), (Bitmap)clip_img.Clone());
+            Point ptr = Search.SearchPixelBitmap((Bitmap)src_img.Clone(), (Bitmap)clip_img.Clone());
 
             Console.WriteLine(pr.X + " , " + pr.Y);
             Console.WriteLine(ptr.X + " , " + ptr.Y);
@@ -174,57 +181,54 @@ namespace SummonersWar
             switch ((int)e.KeyValue)
             {
                 /// Buttom 'F1'
-                /// Send ClickEvents ('A' + Index) to Assistant
+                /// 
                 case 112:
-                    this.Text = "Index = " + Index.ToString() + " , Send Click Events. ";
-                    SendClickEvents(Index);                    
+                    SimulateClickTimer.Start();
+                    this.Text = "AutoClick Start.";
                     break;
                 /// Buttom 'F2'
                 /// Search Assistant image with Clip[Index]
                 case 113:
-                    Point pt = SearchImage(Clip[Index], -1, -1);
-                    Point ptr = SearchImage(Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
-
-                    //if (pt.X != -1 && pt.Y != -1)
-                    //    SendClickEvents(Index);
-                    //if (ptr.X != -1 && ptr.Y != -1)
-                    //    SendClickEvents(Index);
+                    SimulateClickTimer.Stop();
+                    this.Text = "AutoClick Stop.";
                     break;
                 /// Buttom 'F3'
-                    /// Save current Assistant image
+                /// Search Image
                 case 114:
+                    //Point pt = SearchImage(Clip[Index], -1, -1);
+                    Point ptr = SearchImage(Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+
+                    break;
+                /// Buttom 'F4'
+                /// Capture current window image
+                case 115:
                     Image Picture = CaptureScreen.CapturehWndWindow(AssistantHwnd);
                     Picture.Save(Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
                     Console.WriteLine("Image has been saved at : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
                     this.Text = "Image has been saved at : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss").ToString() + "_Image.png";
+
                     break;
-                /// Buttom 'F4'
-                /// Set Index to 0
-                case 115: //F4 , Set IndexCounter => 0
+                /// Buttom 'F5' , Set IndexCounter => 0
+                /// 
+                case 116:
                     Index = 0;
                     this.Text = "Index = " + Index.ToString();
                     break;
-                /// Buttom 'F5'
-                /// Set Index += 1
-                case 116:
+                /// Buttom 'F6' , Index ++
+                /// 
+                case 117:
                     Index++;
                     this.Text = "Add index , Index = " + Index.ToString();
                     break;
-                /// Buttom 'F6'
-                /// 
-                case 117:
-                    break;
                 /// Buttom 'F7'  
-                /// Timer Start.
+                /// Send ClickEvents ('A' + Index) to Assistant
                 case 118:
-                    SimulateClickTimer.Start();
-                    this.Text = "AutoClick Start.";
+                    this.Text = "Index = " + Index.ToString() + " , Send Click Events. ";
+                    SendClickEvents(Index);
                     break;
                 /// Buttom 'F8'  
-                /// Timer Stop.
+                /// 
                 case 119: 
-                    SimulateClickTimer.Stop();
-                    this.Text = "AutoClick Stop.";
                     break;
             }
         }
@@ -258,7 +262,7 @@ namespace SummonersWar
             Image pic = CaptureScreen.CapturehWndWindow(AssistantHwnd);
 
             Point pt = Search.SearchLockBitmap((Bitmap)pic.Clone(), (Bitmap)SearchImg.Clone(), x, y);
-            Point bpt = Search.BitmapPixelSearch((Bitmap)pic, (Bitmap)SearchImg, x, y);
+            Point bpt = Search.SearchPixelBitmap((Bitmap)pic, (Bitmap)SearchImg, x, y);
 
             Console.WriteLine("Recieve Point : " + x + " , " + y + " . Result : " + pt.X + " , " + pt.Y);
             Console.WriteLine("Recieve Bitmap Point : " + x + " , " + y + " . Result : " + bpt.X + " , " + bpt.Y);
@@ -306,7 +310,7 @@ namespace SummonersWar
         {
             Image Source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
             Bitmap src = (Bitmap)Source.Clone(), compare = (Bitmap)Clip[Index].Clone();
-            Point Result = Search.BitmapPixelSearch(src, compare, ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+            Point Result = Search.SearchPixelBitmap(src, compare, ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
             //Point Result = Search.SearchLockBitmap((Bitmap)Source.Clone(), (Bitmap)Clip[Index].Clone(), ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);            
             // Memory problem.
 
@@ -325,47 +329,15 @@ namespace SummonersWar
                         SendClickEvents(Index);
                         Thread.Sleep(400);
                         SendClickEvents(Index);
-                        Thread.Sleep(400);
+                        Thread.Sleep(800);
                         SendClickEvents(Index);
 
-                        Thread.Sleep(1800);
+                        Thread.Sleep(500);
                         SendClickEvents(1);
-                        Thread.Sleep(1200);
+                        Thread.Sleep(500);
                         SendClickEvents(2);
 
                         Index = 4;
-                        //Image SubScreen = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-                        //Point SubResult = new Point(-1, -1);
-
-                        //int BreakPointer = 0;
-                        //for (int i = 1; i < 4; i++)
-                        //{
-                        //    //SubResult = Search.SearchLockBitmap((Bitmap)SubScreen.Clone(), (Bitmap)Clip[i].Clone(), ClipSearchPoints[i].X, ClipSearchPoints[i].Y);
-                        //    SubResult = Search.BitmapPixelSearch((Bitmap)SubScreen.Clone(), (Bitmap)Clip[i].Clone(), ClipSearchPoints[i].X, ClipSearchPoints[i].Y);
-
-                        //    if (SubResult != new Point(-1, -1))
-                        //    {
-                        //        BreakPointer = i;
-                        //        break;
-                        //    }
-                        //    Thread.Sleep(100);
-                        //}
-                        //SubScreen.Dispose();
-
-                        //switch (BreakPointer)
-                        //{
-                        //    case 1:
-                        //        Index = 1;
-                        //        break;
-                        //    case 2:
-                        //    case 3:
-                        //        Index = 2;
-                        //        break;
-                        //    default:
-                        //        SimulateClickTimer.Stop();
-                        //        this.Text = "Timer Stop , system didnt find out next target after Clip[0]";
-                        //        break;
-                        //}
                         break;
                     case 1:
                     case 2:
@@ -391,6 +363,30 @@ namespace SummonersWar
                 BStatus.Text = "BlueStacks is Running ... ";
             else
                 BStatus.Text = "BlueStacks is Closed.";
+        }
+
+        private void AutoClick_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (AssistantHwnd != IntPtr.Zero)
+            {
+                Process[] process = Process.GetProcessesByName("Bluestacks");
+
+                process[0].Kill();
+
+                process = Process.GetProcessesByName("HD-Agent");
+
+                process[0].Kill();
+
+                process = Process.GetProcessesByName("HD-Player");
+
+                process[0].Kill();
+
+                process = Process.GetProcessesByName("BstkSVC");
+
+                process[0].Kill();
+
+                //this.Close();
+            }
         }
     }
 }
