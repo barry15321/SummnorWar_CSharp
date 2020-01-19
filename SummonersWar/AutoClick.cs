@@ -84,9 +84,9 @@ namespace SummonersWar
 
             Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Crystal.png")); ClipSearchPoints.Add(new Point(1165, 446));
             Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\AgainButton.png")); ClipSearchPoints.Add(new Point(375, 456));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\ConfirmButton.png")); ClipSearchPoints.Add(new Point(-1, -1));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\AgainButton.png")); ClipSearchPoints.Add(new Point(-1, -1));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Map.png")); ClipSearchPoints.Add(new Point(1078, 675));
 
             //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\467447_Step1.png")); ClipSearchPoints.Add(new Point(467, 447));
             //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\678671_Step2_1.png")); ClipSearchPoints.Add(new Point(678, 671));
@@ -320,21 +320,23 @@ namespace SummonersWar
             {
                 this.Text = "AutoClick Searching Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
 
+                Thread.Sleep(500);
                 SendClickEvents(Index);
-                Thread.Sleep(400);
                 switch (Index)
                 {
                     case 0:
                         Thread.Sleep(200);
                         SendClickEvents(Index);
-                        Thread.Sleep(400);
+                        Thread.Sleep(500);
                         SendClickEvents(Index);
                         Thread.Sleep(800);
                         SendClickEvents(Index);
 
-                        Thread.Sleep(500);
+                        Thread.Sleep(1000); //Wait ME
+
+                        Thread.Sleep(800);
                         SendClickEvents(1);
-                        Thread.Sleep(500);
+                        Thread.Sleep(800);
                         SendClickEvents(2);
 
                         Index = 4;
@@ -348,7 +350,7 @@ namespace SummonersWar
                         Index = 0;
                         break;
                 }
-                Thread.Sleep(400);
+                Thread.Sleep(200);
             }
 
             Source.Dispose();
