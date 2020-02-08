@@ -84,8 +84,8 @@ namespace SummonersWar
 
             Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Crystal.png")); ClipSearchPoints.Add(new Point(1165, 446));
             Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\SellButton.png")); ClipSearchPoints.Add(new Point(678, 671));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\ConfirmButton.png")); ClipSearchPoints.Add(new Point(-1, -1));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\AgainButton.png")); ClipSearchPoints.Add(new Point(-1, -1));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\ConfirmButton.png")); ClipSearchPoints.Add(new Point(782, 699));
+            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\AgainButton.png")); ClipSearchPoints.Add(new Point(375, 459));
             Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Map.png")); ClipSearchPoints.Add(new Point(1078, 675));
 
             //Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\ClipMax\\467447_Step1.png")); ClipSearchPoints.Add(new Point(467, 447));
@@ -228,8 +228,37 @@ namespace SummonersWar
                     break;
                 /// Buttom 'F8'  
                 /// 
-                case 119: 
+                case 119:
+                    Image source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
+
+                    Point btmap = Search.SearchPixelBitmap((Bitmap)source.Clone(), (Bitmap)Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+                    Point lockmap = Search.SearchLockBitmap((Bitmap)source.Clone(), (Bitmap)Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+
+                    Console.WriteLine("btmap : " + btmap);
+                    Console.WriteLine("lockmap : " + lockmap);
                     break;
+
+                    //Bitmap bmp = (Bitmap)source.Clone();
+                    //LockBitmap lockbit = new LockBitmap((Bitmap)source.Clone());
+                    //lockbit.LockBits();
+
+                    ////676,674 => 30*20
+                    //for (int i = 676; i < 706; i++)
+                    //{
+                    //    for (int j = 674; j < 694; j++)
+                    //    {
+                    //        Color cr = bmp.GetPixel(i, j);
+                    //        Color crr = lockbit.GetPixel(i, j);
+
+                    //        if (cr != crr)
+                    //        {
+                    //            Console.WriteLine("i = " + i + " , j = " + j + " :: " + cr + " , " + crr);
+                    //        }
+                    //    }
+                    //}
+
+                    //lockbit.UnlockBits();
+                    //break;
             }
         }
 

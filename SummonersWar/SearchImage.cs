@@ -34,7 +34,10 @@ class SearchImage
                         {
                             for (int j2 = 0; j2 < ChildMap.Height; j2++)
                             {
-                                if (ParentMap.GetPixel(i + i2, j + j2) != ChildMap.GetPixel(i2, j2))
+                                Color left = ParentMap.GetPixel(i + i2, j + j2), right = ChildMap.GetPixel(i2, j2);
+                                bool Judgement = (left.R == right.R) && (left.G == right.G) && (left.B == right.B);
+                                if (!Judgement)
+                                //if (ParentMap.GetPixel(i + i2, j + j2) != ChildMap.GetPixel(i2, j2))
                                 {
                                     IsMatch = false;
                                     break;
@@ -67,7 +70,10 @@ class SearchImage
                 {
                     for (int j = 0; j < ChildBitmap.Height; j++)
                     {
-                        if (ParentMap.GetPixel(ImageLocationX + i, ImageLocationY + j) != ChildMap.GetPixel(i, j))
+                        Color left = ParentMap.GetPixel(ImageLocationX + i, ImageLocationY + j), right = ChildMap.GetPixel(i, j);
+                        bool Judgement = (left.R == right.R) && (left.G == right.G) && (left.B == right.B);
+                        if (!Judgement)
+                        //if (ParentMap.GetPixel(ImageLocationX + i, ImageLocationY + j) != ChildMap.GetPixel(i, j))
                         {
                             IsMatch = false;
                             break;
