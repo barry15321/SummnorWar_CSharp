@@ -38,9 +38,15 @@ Window 7 + Visual Studio (.net 4.5.2) + Bluestacks。
 
 <h1 id="action">Key Action : </h1>
 F1 : 按鍵判圖點擊開啟。
+
 F2 : 按鍵判圖點擊關閉。
+
 F3 : 擷取當前畫面並與第 Index 張影像比對 
+
 F4 : 擷取當前畫面並存檔
+
 F5 : Index += 1 
+
 F6 : Index = 0
+
 F7 : 模擬當前 Index 所對應點擊 Bluestack 的事件
