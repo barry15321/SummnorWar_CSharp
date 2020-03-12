@@ -37,6 +37,7 @@ Window 7 + Visual Studio (.net 4.5.2) + Bluestacks。
 開啟自動化腳本輔助程式，選擇 Window -> SummonerWar
 
 <h1 id="action">Key Action : </h1>
+
 F1 : 按鍵判圖點擊開啟。
 
 F2 : 按鍵判圖點擊關閉。
