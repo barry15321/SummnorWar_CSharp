@@ -49,6 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -62,11 +65,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoClick.cs">
+    <Compile Include="AssistantInterface.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AutoClick.Designer.cs">
-      <DependentUpon>AutoClick.cs</DependentUpon>
+    <Compile Include="AssistantInterface.Designer.cs">
+      <DependentUpon>AssistantInterface.cs</DependentUpon>
     </Compile>
     <Compile Include="hWndList.cs">
       <SubType>Form</SubType>
@@ -74,26 +77,34 @@
     <Compile Include="hWndList.Designer.cs">
       <DependentUpon>hWndList.cs</DependentUpon>
     </Compile>
-    <Compile Include="LockBitmap.cs" />
-    <Compile Include="SearchImage.cs" />
+    <Compile Include="ImageStorage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImageStorage.Designer.cs">
+      <DependentUpon>ImageStorage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Image_directory.cs" />
+    <Compile Include="ProcessLibrary\LockBitmap.cs" />
+    <Compile Include="ProcessLibrary\SearchImage.cs" />
     <Compile Include="SummonerAssistant.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SummonerAssistant.Designer.cs">
       <DependentUpon>SummonerAssistant.cs</DependentUpon>
     </Compile>
-    <Compile Include="WindowClass.cs" />
+    <Compile Include="WindowsLibrary\WindowsAPI.cs" />
     <Compile Include="GlobalKeyBoardHook.cs" />
-    <Compile Include="MessageHandlingClass.cs" />
-    <Compile Include="MouseEventsClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScreenCapture.cs" />
-    <EmbeddedResource Include="AutoClick.resx">
-      <DependentUpon>AutoClick.cs</DependentUpon>
+    <Compile Include="ProcessLibrary\ScreenCapture.cs" />
+    <EmbeddedResource Include="AssistantInterface.resx">
+      <DependentUpon>AssistantInterface.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="hWndList.resx">
       <DependentUpon>hWndList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageStorage.resx">
+      <DependentUpon>ImageStorage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,6 +119,7 @@
     <EmbeddedResource Include="SummonerAssistant.resx">
       <DependentUpon>SummonerAssistant.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -142,6 +154,7 @@
   <ItemGroup>
     <None Include="Resources\summonericon_LxV_icon.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

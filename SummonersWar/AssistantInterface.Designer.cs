@@ -1,6 +1,6 @@
 ﻿namespace SummonersWar
 {
-    partial class AutoClick
+    partial class AssistantInterface
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoClick));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AssistantInterface));
             this.ToolMenu = new System.Windows.Forms.MenuStrip();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listHwndToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summonerWarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageReloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CloseBtn = new System.Windows.Forms.Button();
             this.InfoTable = new System.Windows.Forms.GroupBox();
             this.AStatus = new System.Windows.Forms.Label();
@@ -62,24 +63,32 @@
             // 
             this.openToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.listHwndToolStripMenuItem,
-            this.summonerWarToolStripMenuItem});
+            this.summonerWarToolStripMenuItem,
+            this.imageReloadToolStripMenuItem});
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.openToolStripMenuItem.Text = "Window";
             // 
             // listHwndToolStripMenuItem
             // 
             this.listHwndToolStripMenuItem.Name = "listHwndToolStripMenuItem";
-            this.listHwndToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.listHwndToolStripMenuItem.Text = "ListHwnd";
+            this.listHwndToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.listHwndToolStripMenuItem.Text = "Window List";
             this.listHwndToolStripMenuItem.Click += new System.EventHandler(this.listHwndToolStripMenuItem_Click);
             // 
             // summonerWarToolStripMenuItem
             // 
             this.summonerWarToolStripMenuItem.Name = "summonerWarToolStripMenuItem";
-            this.summonerWarToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.summonerWarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.summonerWarToolStripMenuItem.Text = "SummonerWar";
             this.summonerWarToolStripMenuItem.Click += new System.EventHandler(this.summonerWarToolStripMenuItem_Click);
+            // 
+            // imageReloadToolStripMenuItem
+            // 
+            this.imageReloadToolStripMenuItem.Name = "imageReloadToolStripMenuItem";
+            this.imageReloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.imageReloadToolStripMenuItem.Text = "Image Reload";
+            this.imageReloadToolStripMenuItem.Click += new System.EventHandler(this.imageReloadToolStripMenuItem_Click);
             // 
             // CloseBtn
             // 
@@ -151,7 +160,7 @@
             // 
             this.SimulateClickTimer.Tick += new System.EventHandler(this.SimulateClickTimer_Tick);
             // 
-            // AutoClick
+            // AssistantInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -164,8 +173,8 @@
             this.MainMenuStrip = this.ToolMenu;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
-            this.Name = "AutoClick";
-            this.Text = "  AutoClicker";
+            this.Name = "AssistantInterface";
+            this.Text = " Assistant Interface";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoClick_FormClosing);
             this.ToolMenu.ResumeLayout(false);
             this.ToolMenu.PerformLayout();
@@ -191,6 +200,7 @@
         private System.Windows.Forms.Timer BSRunningTimer;
         private System.Windows.Forms.Timer CompareImageTimer;
         private System.Windows.Forms.Timer SimulateClickTimer;
+        private System.Windows.Forms.ToolStripMenuItem imageReloadToolStripMenuItem;
     }
 }
 

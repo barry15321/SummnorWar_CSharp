@@ -13,9 +13,9 @@ namespace SummonersWar
     public partial class SummonerAssistant : Form
     {
         IntPtr TargetHwnd;
-        WindowClass.RECT TargetRect;
+        WindowsAPI.RECT TargetRect;
 
-        public SummonerAssistant(IntPtr hWnd , WindowClass.RECT hWndRect)
+        public SummonerAssistant(IntPtr hWnd , WindowsAPI.RECT hWndRect)
         {            
             InitializeComponent();
 
@@ -26,7 +26,7 @@ namespace SummonersWar
 
         private void InitialFunction()
         {
-            WindowClass win = new WindowClass();
+            WindowsAPI win = new WindowsAPI();
 
             Console.WriteLine("TargetHwnd : " + TargetHwnd.ToString());
             Console.WriteLine("TargetRect : " + TargetRect.Left + " , " + TargetRect.Right + " , " + TargetRect.Top + " , " + TargetRect.Bottom);

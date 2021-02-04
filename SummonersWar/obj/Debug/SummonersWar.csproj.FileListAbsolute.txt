@@ -67,3 +67,19 @@ C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.Pro
 C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.SummonerAssistant.resources
 C:\Users\barry.yang\Desktop\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csproj.GenerateResource.Cache
 C:\Users\ReplacedToy\source\repos\SummonersWar\SummonersWar\obj\Debug\SummonersWar.csprojResolveAssemblyReference.cache
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\bin\Debug\SummonersWar.exe.config
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\bin\Debug\SummonersWar.exe
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\bin\Debug\SummonersWar.pdb
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.AssistantInterface.resources
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.hWndList.resources
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.Properties.Resources.resources
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.SummonerAssistant.resources
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.csproj.GenerateResource.cache
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.csproj.CoreCompileInputs.cache
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.exe
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.pdb
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.ImageStorage.resources
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\bin\Debug\Newtonsoft.Json.dll
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\bin\Debug\Newtonsoft.Json.xml
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.csproj.CopyComplete
+D:\Side Projects\SummnorWar_CSharp\SummonersWar\obj\Debug\SummonersWar.csprojAssemblyReference.cache

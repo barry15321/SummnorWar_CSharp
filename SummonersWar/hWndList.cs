@@ -20,7 +20,7 @@ namespace SummonersWar
 
         public void ListHwndDetail()
         {
-            WindowClass fw = new WindowClass();
+            WindowsAPI fw = new WindowsAPI();
             fw.GetEnums();
 
             List<string> HwndName = fw.ToGetHwndNameList();
