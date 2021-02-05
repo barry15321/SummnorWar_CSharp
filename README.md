@@ -38,16 +38,16 @@ ps：模擬器選項繪圖方式使用 DirectX，勿用 OpenGL。
 
 <h1 id="action">Key Action : </h1>
 
-F1 : 按鍵判圖點擊開啟。
+F1 : 腳本開始運行。
 
-F2 : 按鍵判圖點擊關閉。
+F2 : 腳本結束運行。
 
 F3 : 擷取當前畫面並與第 Index 張影像比對 
 
-F4 : 擷取當前畫面並存檔
+F4 : 擷取當前畫面
 
-F5 : Index += 1 
+F5 : Index = 0 
 
-F6 : Index = 0
+F6 : Index += 1
 
 F7 : 模擬當前 Index 所對應點擊 Bluestack 的事件
