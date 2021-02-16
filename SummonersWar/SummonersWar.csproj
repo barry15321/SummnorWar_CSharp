@@ -84,6 +84,7 @@
       <DependentUpon>ImageStorage.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Image_directory.cs" />
+    <Compile Include="Model\Script_data.cs" />
     <Compile Include="ProcessLibrary\LockBitmap.cs" />
     <Compile Include="ProcessLibrary\SearchImage.cs" />
     <Compile Include="SummonerAssistant.cs">

@@ -35,7 +35,6 @@
             this.listHwndToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.summonerWarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageReloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CloseBtn = new System.Windows.Forms.Button();
             this.InfoTable = new System.Windows.Forms.GroupBox();
             this.AStatus = new System.Windows.Forms.Label();
             this.BStatus = new System.Windows.Forms.Label();
@@ -72,33 +71,23 @@
             // listHwndToolStripMenuItem
             // 
             this.listHwndToolStripMenuItem.Name = "listHwndToolStripMenuItem";
-            this.listHwndToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.listHwndToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.listHwndToolStripMenuItem.Text = "Window List";
             this.listHwndToolStripMenuItem.Click += new System.EventHandler(this.listHwndToolStripMenuItem_Click);
             // 
             // summonerWarToolStripMenuItem
             // 
             this.summonerWarToolStripMenuItem.Name = "summonerWarToolStripMenuItem";
-            this.summonerWarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.summonerWarToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.summonerWarToolStripMenuItem.Text = "SummonerWar";
             this.summonerWarToolStripMenuItem.Click += new System.EventHandler(this.summonerWarToolStripMenuItem_Click);
             // 
             // imageReloadToolStripMenuItem
             // 
             this.imageReloadToolStripMenuItem.Name = "imageReloadToolStripMenuItem";
-            this.imageReloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.imageReloadToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
             this.imageReloadToolStripMenuItem.Text = "Image Reload";
             this.imageReloadToolStripMenuItem.Click += new System.EventHandler(this.imageReloadToolStripMenuItem_Click);
-            // 
-            // CloseBtn
-            // 
-            this.CloseBtn.Location = new System.Drawing.Point(263, 111);
-            this.CloseBtn.Name = "CloseBtn";
-            this.CloseBtn.Size = new System.Drawing.Size(73, 27);
-            this.CloseBtn.TabIndex = 1;
-            this.CloseBtn.Text = "Close";
-            this.CloseBtn.UseVisualStyleBackColor = true;
-            this.CloseBtn.Click += new System.EventHandler(this.CloseBtn_Click);
             // 
             // InfoTable
             // 
@@ -106,8 +95,7 @@
             this.InfoTable.Controls.Add(this.BStatus);
             this.InfoTable.Controls.Add(this.ATStatusLabel);
             this.InfoTable.Controls.Add(this.BStatusLabel);
-            this.InfoTable.Controls.Add(this.CloseBtn);
-            this.InfoTable.Location = new System.Drawing.Point(12, 27);
+            this.InfoTable.Location = new System.Drawing.Point(11, 27);
             this.InfoTable.Name = "InfoTable";
             this.InfoTable.Size = new System.Drawing.Size(346, 148);
             this.InfoTable.TabIndex = 2;
@@ -117,7 +105,7 @@
             // AStatus
             // 
             this.AStatus.AutoSize = true;
-            this.AStatus.Location = new System.Drawing.Point(148, 66);
+            this.AStatus.Location = new System.Drawing.Point(149, 66);
             this.AStatus.Name = "AStatus";
             this.AStatus.Size = new System.Drawing.Size(18, 17);
             this.AStatus.TabIndex = 5;
@@ -126,7 +114,7 @@
             // BStatus
             // 
             this.BStatus.AutoSize = true;
-            this.BStatus.Location = new System.Drawing.Point(148, 31);
+            this.BStatus.Location = new System.Drawing.Point(149, 31);
             this.BStatus.Name = "BStatus";
             this.BStatus.Size = new System.Drawing.Size(18, 17);
             this.BStatus.TabIndex = 4;
@@ -135,7 +123,7 @@
             // ATStatusLabel
             // 
             this.ATStatusLabel.AutoSize = true;
-            this.ATStatusLabel.Location = new System.Drawing.Point(28, 66);
+            this.ATStatusLabel.Location = new System.Drawing.Point(27, 66);
             this.ATStatusLabel.Name = "ATStatusLabel";
             this.ATStatusLabel.Size = new System.Drawing.Size(113, 17);
             this.ATStatusLabel.TabIndex = 3;
@@ -144,7 +132,7 @@
             // BStatusLabel
             // 
             this.BStatusLabel.AutoSize = true;
-            this.BStatusLabel.Location = new System.Drawing.Point(28, 31);
+            this.BStatusLabel.Location = new System.Drawing.Point(27, 31);
             this.BStatusLabel.Name = "BStatusLabel";
             this.BStatusLabel.Size = new System.Drawing.Size(116, 17);
             this.BStatusLabel.TabIndex = 2;
@@ -171,7 +159,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.ToolMenu;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.MaximizeBox = false;
             this.Name = "AssistantInterface";
             this.Text = " Assistant Interface";
@@ -190,7 +178,6 @@
         private System.Windows.Forms.MenuStrip ToolMenu;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listHwndToolStripMenuItem;
-        private System.Windows.Forms.Button CloseBtn;
         private System.Windows.Forms.GroupBox InfoTable;
         private System.Windows.Forms.Label BStatusLabel;
         private System.Windows.Forms.Label AStatus;

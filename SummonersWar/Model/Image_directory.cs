@@ -10,6 +10,8 @@ namespace SummonersWar
     {
         public int index { get; set; }
         public string path { get; set; }
+        public int delaytime { get; set; }
+        public bool IsForceClick { get; set; }
     }
 
 }

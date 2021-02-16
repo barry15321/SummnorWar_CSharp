@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using SummonersWar.Model;
 
 namespace SummonersWar
 {
@@ -33,9 +34,7 @@ namespace SummonersWar
 
         GlobalKeyboardHook hk;
 
-        List<Image> Imagelist = new List<Image>();
-        List<Image> Clip = new List<Image>();
-        List<Point> ClipSearchPoints = new List<Point>();
+        List<Script_data> data = new List<Script_data>();
         List<IntPtr> AssistantWindowHwndList = new List<IntPtr>();
        
         IntPtr BlueStackHwnd = IntPtr.Zero;
@@ -93,12 +92,6 @@ namespace SummonersWar
             hk.hook();
             //Full Area keyboardhooking
 
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Crystal.png")); ClipSearchPoints.Add(new Point(1379, 579));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Sell.png")); ClipSearchPoints.Add(new Point(730, 867));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Confirm.png")); ClipSearchPoints.Add(new Point(-1, -1));
-            Clip.Add(Image.FromFile(System.Windows.Forms.Application.StartupPath + "\\FireMountain\\Map.png")); ClipSearchPoints.Add(new Point(1257, 878));
-
-            // Capture Image , Points add into List
         }
 
         #region Key Events
@@ -122,8 +115,7 @@ namespace SummonersWar
                 /// Buttom 'F3'
                 /// Search Image
                 case 114:
-                    //Point pt = SearchImage(Clip[Index], -1, -1);
-                    Point ptr = SearchImage(Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+                    Point ptr = SearchImage(data[Index].img, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
                     this.Text = "Search Result : x :  " + ptr.X + " , y : " + ptr.Y; 
                     break;
                 /// Buttom 'F4'
@@ -158,8 +150,8 @@ namespace SummonersWar
                 case 119:
                     Image source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
 
-                    Point btmap = Search.SearchPixelBitmap((Bitmap)source.Clone(), (Bitmap)Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
-                    Point lockmap = Search.SearchLockBitmap((Bitmap)source.Clone(), (Bitmap)Clip[Index], ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
+                    Point btmap = Search.SearchPixelBitmap((Bitmap)source.Clone(), (Bitmap)data[Index].img, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
+                    Point lockmap = Search.SearchLockBitmap((Bitmap)source.Clone(), (Bitmap)data[Index].img, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
 
                     Console.WriteLine("btmap : " + btmap);
                     Console.WriteLine("lockmap : " + lockmap);
@@ -181,51 +173,30 @@ namespace SummonersWar
         private void SimulateClickTimer_Tick(object sender, EventArgs e)
         {
             Image Source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-            Bitmap src = (Bitmap)Source.Clone(), compare = (Bitmap)Imagelist[Index].Clone();
-            Point BitResult = Search.SearchPixelBitmap(src, compare, ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);
-            Point Result = Search.SearchLockBitmap((Bitmap)Source.Clone(), compare, ClipSearchPoints[Index].X, ClipSearchPoints[Index].Y);            
-            // Memory problem.
+            Bitmap src = (Bitmap)Source.Clone(), compare = (Bitmap)data[Index].img.Clone();
+            //Point BitResult = Search.SearchPixelBitmap(src, compare, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
+            Point Result = Search.SearchLockBitmap((Bitmap)Source.Clone(), compare, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
 
             if (Result.X == -1 && Result.Y == -1)
+            {
                 this.Text = "AutoClick Searching Failure , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+
+                if (data[Index].IsForced)
+                {
+                    SendClickEvents(Index);
+                    Index = (data.Count - 1 == Index) ? 0 : Index + 1;
+                }
+            }
             else
             {
                 this.Text = "AutoClick Searching Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
 
-                if (ClipSearchPoints[Index].X == -1 && ClipSearchPoints[Index].Y == -1)
-                    ClipSearchPoints[Index] = new Point(Result.X, Result.Y);
-                Thread.Sleep(500);
+                Thread.Sleep(100);
                 SendClickEvents(Index);
-                switch (Index)
-                {
-                    case 0:
-                        Thread.Sleep(200);
-                        SendClickEvents(Index);
-                        Thread.Sleep(500);
-                        SendClickEvents(Index);
-                        Thread.Sleep(800);
-                        SendClickEvents(Index);
+                Thread.Sleep(data[Index].delaytime);
 
-                        Thread.Sleep(1000); //Wait ME
+                Index = (data.Count - 1 == Index) ? 0 : Index + 1;
 
-                        Thread.Sleep(800);
-                        SendClickEvents(1);
-                        Thread.Sleep(800);
-                        SendClickEvents(2);
-
-                        Index = 3;
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                        //Index = 3;
-                        Index = 0;
-                        break;
-                    case 4:
-                        Index = 0;
-                        break;
-                }
-                Thread.Sleep(200);
             }
 
             Source.Dispose();
@@ -278,7 +249,7 @@ namespace SummonersWar
 
                     window.ToShowWindowAsync(TargetHwnd, 3);
                     // reload image list and SearchPoints
-                    Reload_Imagelist();
+                    Reload_Imagedata();
                     
                 }
                 else
@@ -296,10 +267,6 @@ namespace SummonersWar
         }
         #endregion
 
-        private void CloseBtn_Click(object sender, EventArgs e)
-        {
-            //this.Close();
-        }
 
         private List<IntPtr> EnumWindowsList(IntPtr ptr)
         {
@@ -331,31 +298,9 @@ namespace SummonersWar
             return pt;
         }
         
-        int wparam = 0;
         private void SendClickEvents(int KeyOptions)
         {
             int KeyValue = (int)Keys.A + KeyOptions;
-
-            switch (KeyOptions)
-            {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    KeyValue = (int)Keys.A + KeyOptions;
-                    break;
-                case 4:
-                    KeyValue = (int)Keys.A + KeyOptions - 1;
-                    break;
-            }
-
-            //IntPtr ptr = BlueStackHwnd;
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    Message.ToPostMessage(ptr, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
-            //    Message.ToPostMessage(ptr, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
-            //    ptr = window.ToFindWindowEx(ptr, IntPtr.Zero, null, null);
-            //}
 
             foreach (IntPtr p in AssistantWindowHwndList)
             {
@@ -398,23 +343,27 @@ namespace SummonersWar
             //}
         }
 
-        private void Reload_Imagelist()
+        private void Reload_Imagedata()
         {
             List<Image_directory> list = new List<Image_directory>();
+            data = new List<Script_data>();
             using (StreamReader sr = new StreamReader(SetupFilePath))
             {
                 string json = sr.ReadToEnd();
-                ClipSearchPoints = new List<Point>();
-
+                
+                //ClipSearchPoints = new List<Point>();
+                //delayTimes = new List<int>();
                 if (json != string.Empty)
                 {
                     try
                     {
                         list = JsonConvert.DeserializeObject<List<Image_directory>>(json);
                         for (int i = 0; i < list.Count; i++)
-                        { 
-                            Imagelist.Add(Image.FromFile(list[i].path));
-                            ClipSearchPoints.Add(new Point(-1, -1));
+                        {
+                            data.Add(new Script_data() { img = Image.FromFile(list[i].path), delaytime = list[i].delaytime, IsForced = list[i].IsForceClick, SearchPoints = new Point(-1, -1) });
+                            //Imagelist.Add(Image.FromFile(list[i].path));
+                            //delayTimes.Add(list[i].delaytime);
+                            //ClipSearchPoints.Add(new Point(-1, -1));
                         }
                     }
                     catch (Exception ex)
