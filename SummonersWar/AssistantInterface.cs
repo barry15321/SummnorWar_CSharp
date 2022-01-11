@@ -19,12 +19,11 @@ namespace SummonersWar
 {
     public partial class AssistantInterface : Form
     {
-        WindowsAPI window = new WindowsAPI(); 
-        Messages Message = new Messages();
+        WindowsAPI wapi = new WindowsAPI(); 
+        Messages msg_api = new Messages();
 
         ScreenCapture CaptureScreen = new ScreenCapture();
         SearchImage Search = new SearchImage();
-        ImageStorage isg = new ImageStorage();
 
         int Index = 0;
         bool IsAssistantWorking = false;
@@ -36,8 +35,8 @@ namespace SummonersWar
 
         List<Script_data> data = new List<Script_data>();
         List<IntPtr> AssistantWindowHwndList = new List<IntPtr>();
-       
-        IntPtr BlueStackHwnd = IntPtr.Zero;
+
+        IntPtr BlueStackHwnd = IntPtr.Zero, target = IntPtr.Zero;
         public enum KeyBoardEventsFlag
         {
             WM_KEYDOWN = 0x100,
@@ -63,24 +62,19 @@ namespace SummonersWar
             RIGHTUP = 0x00000010
         }
 
-        //private const int WM_SETTEXT = 0x000c;        
-        //private const int WM_MOUSE_MOVE = 0x0200;
-        //private const int WM_LBUTTON_DOWN = 0x0201; //'0x C# 16x = &H
-        //private const int WM_LBUTTON_UP = 0x0202;
-        //private const int WM_KEYDOWN = 0x0100;
-        //private const int WM_KEYUP = 0x0101;
-        //private const int WM_CHAR = 0x0102;
-
         public AssistantInterface()
         {
             InitializeComponent();
-            InitializeAutoClickFunction();
+            init_function();
         }
 
-        private void InitializeAutoClickFunction()
+        private void init_function()
         {
-            IntPtr target = window.ToFindWindow("BlueStacks");
-            List<IntPtr> target_list = EnumWindowsList(target);
+            BlueStackHwnd = wapi.ToFindWindow("BlueStacks");
+            target = wapi.ToFindWindowEx(BlueStackHwnd, IntPtr.Zero, null, null); 
+            //IntPtr target = window.ToFindWindow("BlueStacks");
+            //List<IntPtr> target_list = EnumWindowsList(target);
+            //AssistantWindowHwndList = target_list;
 
             hk = new GlobalKeyboardHook();
             hk.KeyDown += new KeyEventHandler(gHook_KeyDown);
@@ -90,64 +84,53 @@ namespace SummonersWar
                 hk.HookedKeys.Add(key);
 
             hk.hook();
-            //Full Area keyboardhooking
-
+            //Full Area keyboard hook
         }
 
         #region Key Events
 
         private void gHook_KeyDown(object sender, KeyEventArgs e)
         {
-            switch ((int)e.KeyValue)
+            switch (e.KeyCode)
             {
-                /// Buttom 'F1'
-                /// 
-                case 112:
+                case Keys.F1:
                     SimulateClickTimer.Start();
-                    this.Text = "AutoClick Start.";
+                    label1.Text = "AutoClick Start.";
+                    log_light.Start();
                     break;
-                /// Buttom 'F2'
-                /// Search Assistant image with Clip[Index]
-                case 113:
+                case Keys.F2:
                     SimulateClickTimer.Stop();
-                    this.Text = "AutoClick Stop.";
+                    label1.Text = "AutoClick Stop.";
+                    log_light.Start();
                     break;
-                /// Buttom 'F3'
-                /// Search Image
-                case 114:
+                case Keys.F3:
                     Point ptr = SearchImage(data[Index].img, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
-                    this.Text = "Search Result : x :  " + ptr.X + " , y : " + ptr.Y; 
+                    label1.Text = "Search Result : x :  " + ptr.X + " , y : " + ptr.Y;
+                    log_light.Start();
                     break;
-                /// Buttom 'F4'
-                /// Capture current window image
-                case 115:
+                case Keys.F4:
                     Image Picture = CaptureScreen.CapturehWndWindow(AssistantHwnd);
                     Picture.Save(Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
                     Console.WriteLine("Image has been saved at : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
-                    this.Text = "Image has been saved at : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss").ToString() + "_Image.png";
-
+                    label1.Text = "Image has been saved as : " + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss").ToString() + "_Image.png";
+                    log_light.Start();
                     break;
-                /// Buttom 'F5' , Set IndexCounter => 0
-                /// 
-                case 116:
+                case Keys.F5:
                     Index = 0;
-                    this.Text = "Index = " + Index.ToString();
+                    label1.Text = "Index = " + Index.ToString();
+                    log_light.Start();
                     break;
-                /// Buttom 'F6' , Index ++
-                /// 
-                case 117:
+                case Keys.F6:
                     Index++;
-                    this.Text = "Add index , Index = " + Index.ToString();
+                    label1.Text = "Add index , Index = " + Index.ToString();
+                    log_light.Start();
                     break;
-                /// Buttom 'F7'  
-                /// Send ClickEvents ('A' + Index) to Assistant
-                case 118:
-                    this.Text = "Index = " + Index.ToString() + " , Send Click Events. ";
+                case Keys.F7:
+                    label1.Text = "Index = " + Index.ToString() + " , Send Click Events. ";
                     SendClickEvents(Index);
+                    log_light.Start();
                     break;
-                /// Buttom 'F8'  
-                /// 
-                case 119:
+                case Keys.F8:
                     Image source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
 
                     Point btmap = Search.SearchPixelBitmap((Bitmap)source.Clone(), (Bitmap)data[Index].img, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
@@ -157,6 +140,7 @@ namespace SummonersWar
                     Console.WriteLine("lockmap : " + lockmap);
                     break;
             }
+
         }
         private void gHook_KeyUp(object sender, KeyEventArgs e)
         {
@@ -172,47 +156,86 @@ namespace SummonersWar
 
         private void SimulateClickTimer_Tick(object sender, EventArgs e)
         {
+            log_light.Start();
             Image Source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-            Bitmap src = (Bitmap)Source.Clone(), compare = (Bitmap)data[Index].img.Clone();
+            //Bitmap src = (Bitmap)Source.Clone();
+            Bitmap compare = (Bitmap)data[Index].img.Clone();
             //Point BitResult = Search.SearchPixelBitmap(src, compare, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
             Point Result = Search.SearchLockBitmap((Bitmap)Source.Clone(), compare, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
 
             if (Result.X == -1 && Result.Y == -1)
             {
-                this.Text = "AutoClick Searching Failure , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
-
-                if (data[Index].IsForced)
-                {
-                    SendClickEvents(Index);
-                    Index = (data.Count - 1 == Index) ? 0 : Index + 1;
-                }
+                label2.Text = "faliure , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
             }
             else
             {
-                this.Text = "AutoClick Searching Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+                Thread.Sleep(300);
+                SendClickEvents(Index);
+                switch (Index)
+                {
+                    case 0:
+                        Thread.Sleep(350);
+                        SendClickEvents(Index);
+                        Thread.Sleep(350);
+                        SendClickEvents(Index);
+                        
+                        Thread.Sleep(1000);
+
+                        SendClickEvents(1);
+                        Thread.Sleep(500);
+                        SendClickEvents(2);
+                        Thread.Sleep(500);
+                        SendClickEvents(2);
+                        Index = 4;
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                        //Thread.Sleep(150);
+                        //Index++;
+                        break;
+                    case 4:
+                        Index = 0;
+                        break;
+                }
 
                 Thread.Sleep(100);
-                SendClickEvents(Index);
-                Thread.Sleep(data[Index].delaytime);
-
-                Index = (data.Count - 1 == Index) ? 0 : Index + 1;
-
+                label2.Text = "Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
             }
 
+            //if (Result.X == -1 && Result.Y == -1)
+            //{
+            //    this.Text = "AutoClick Searching Failure , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+
+            //    if (data[Index].IsForced)
+            //    {
+            //        SendClickEvents(Index);
+            //        Index = (data.Count - 1 == Index) ? 0 : Index + 1;
+            //    }
+            //}
+            //else
+            //{
+            //    this.Text = "AutoClick Searching Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+
+            //    Thread.Sleep(100);
+            //    SendClickEvents(Index);
+            //    Index = (data.Count - 1 == Index) ? 0 : Index + 1;
+
+            //}
+
             Source.Dispose();
-            src.Dispose();
+            //src.Dispose();
             compare.Dispose();
         }
 
         private void BSRunningTimer_Tick(object sender, EventArgs e)
         {
-            IntPtr ptr = window.ToFindWindow("BlueStacks");
+            IntPtr ptr = wapi.ToFindWindow("BlueStacks");
             if (ptr != IntPtr.Zero)
                 BStatus.Text = "BlueStacks is Running ... ";
             else
                 BStatus.Text = "BlueStacks is Closed.";
         }
-
 
         #endregion
 
@@ -231,12 +254,12 @@ namespace SummonersWar
 
             if (!IsAssistantWorking)
             {
-                IntPtr TargetHwnd = window.ToFindWindow("BlueStacks");
+                IntPtr TargetHwnd = wapi.ToFindWindow("BlueStacks");
                 BlueStackHwnd = TargetHwnd;
 
-                window.ToShowWindowAsync(TargetHwnd, 3);
+                wapi.ToShowWindowAsync(TargetHwnd, 3);
                 Thread.Sleep(500);
-                WindowsAPI.RECT rect = window.ToGetWindowRect(TargetHwnd);
+                WindowsAPI.RECT rect = wapi.ToGetWindowRect(TargetHwnd);
 
                 if (TargetHwnd != IntPtr.Zero)
                 {
@@ -247,10 +270,50 @@ namespace SummonersWar
                     AssistantHwnd = Assistant.Handle;
                     Assistant.Show();
 
-                    window.ToShowWindowAsync(TargetHwnd, 3);
+                    wapi.ToShowWindowAsync(TargetHwnd, 3);
                     // reload image list and SearchPoints
-                    Reload_Imagedata();
-                    
+                    //Reload_Imagedata();
+                    data = new List<Script_data>();
+                    data.Add(new Script_data()
+                    {
+                        img = Image.FromFile("D:\\Side Projects\\SummnorWar_CSharp\\SummonersWar\\bin\\Debug\\Clip\\victory_mark.png"),
+                        delaytime = 500,
+                        IsForced = true,
+                        SearchPoints = new Point(862, 531)
+                    });
+
+                    data.Add(new Script_data()
+                    {
+                        img = Image.FromFile("D:\\Side Projects\\SummnorWar_CSharp\\SummonersWar\\bin\\Debug\\Clip\\Sell_mark.png"),
+                        delaytime = 500,
+                        IsForced = true,
+                        SearchPoints = new Point(693, 808)
+                    });
+
+                    data.Add(new Script_data()
+                    {
+                        img = Image.FromFile("D:\\Side Projects\\SummnorWar_CSharp\\SummonersWar\\bin\\Debug\\Clip\\mys_confirm.png"),
+                        delaytime = 500,
+                        IsForced = true,
+                        SearchPoints = new Point(828, 794)
+                    });
+
+                    data.Add(new Script_data()
+                    {
+                        img = Image.FromFile("D:\\Side Projects\\SummnorWar_CSharp\\SummonersWar\\bin\\Debug\\Clip\\mon_confirm.png"),
+                        delaytime = 500,
+                        IsForced = true,
+                        SearchPoints = new Point(828, 844)
+                    });
+
+                    data.Add(new Script_data()
+                    {
+                        img = Image.FromFile("D:\\Side Projects\\SummnorWar_CSharp\\SummonersWar\\bin\\Debug\\Clip\\again_mark.png"),
+                        delaytime = 500,
+                        IsForced = true,
+                        SearchPoints = new Point(1190, 818)
+                    });
+
                 }
                 else
                 {
@@ -263,27 +326,97 @@ namespace SummonersWar
         {
             ImageStorage isg = new ImageStorage();
             isg.Show();
+        }
+
+        private void captureScreenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Image Picture = CaptureScreen.CapturehWndWindow(AssistantHwnd);
+            Picture.Save(Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
+            Console.WriteLine("Image has been saved as : " + Environment.CurrentDirectory + "\\" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_Image.png");
+            label1.Text = "Image has been saved as : " + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss").ToString() + "_Image.png";
+            label1.Visible = true;
+            log_light.Start();
+        }
+
+        private void scriptStartToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SimulateClickTimer.Start();
+            label1.Text = "AutoClick Start.";
+            label1.Visible = true;
+            log_light.Start();
+            label2.Visible = true;
+        }
+
+        private void scriptStopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SimulateClickTimer.Stop();
+            label1.Text = "AutoClick Stop.";
+            label1.Visible = true;
+            log_light.Start();
+            label2.Visible = false;
+        }
+
+        private void index0ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Index = 0;
+            label1.Text = "Index = " + Index.ToString();
+            label1.Visible = true;
+            log_light.Start();
+        }
+
+        private void indexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Index += 1;
+            label1.Text = "Index = " + Index.ToString();
+            label1.Visible = true;
+            log_light.Start();
+        }
+
+        private void searchImgindexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Point ptr = SearchImage(data[Index].img, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
+            label1.Text = "Search Result : x :  " + ptr.X + " , y : " + ptr.Y;
+            label1.Visible = true;
+            log_light.Start();
+        }
+
+        private void clickIndexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            label1.Text = "Index = " + Index.ToString() + " , Send Click Events. ";
+            SendClickEvents(Index);
+            label1.Visible = true;
+            log_light.Start();
+        }
+
+        private void log_light_Tick(object sender, EventArgs e)
+        {
+            label1.Visible = false;           
+            log_light.Stop();
+        }
+
+        private void monitorLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
 
         }
-        #endregion
 
+        #endregion
 
         private List<IntPtr> EnumWindowsList(IntPtr ptr)
         {
             List<IntPtr> list = new List<IntPtr>();
             IntPtr pre = IntPtr.Zero;
-                        
+
             while (ptr != IntPtr.Zero)
             {
                 list.Add(ptr);
                 pre = ptr;
-                ptr = window.ToFindWindowEx(ptr, IntPtr.Zero, null, null);
+                ptr = wapi.ToFindWindowEx(ptr, IntPtr.Zero, null, null);
             }
 
             return list;
         }
 
-        private Point SearchImage(Image SearchImg , int x , int y)
+        private Point SearchImage(Image SearchImg, int x, int y)
         {
             ///Point pt = Search.SearchBitmap((Bitmap)pic, (Bitmap)src); Memory Locked.
             Image pic = CaptureScreen.CapturehWndWindow(AssistantHwnd);
@@ -293,54 +426,29 @@ namespace SummonersWar
 
             Console.WriteLine("Recieve Point : " + x + " , " + y + " . Result : " + pt.X + " , " + pt.Y);
             Console.WriteLine();
-            
+
             pic.Dispose();
             return pt;
         }
-        
+
         private void SendClickEvents(int KeyOptions)
         {
             int KeyValue = (int)Keys.A + KeyOptions;
 
-            foreach (IntPtr p in AssistantWindowHwndList)
-            {
-                //window.ToFocusWindow(p);
-                //int lparam = MouseX & 0xFFFF | (MouseY & 0xFFFF) << 16;
-                
-                Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
-                Thread.Sleep(10);
-                Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
+            msg_api.ToPostMessage(target, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
+            Thread.Sleep(10);
+            msg_api.ToPostMessage(target, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
+            Thread.Sleep(10);
 
-                Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
-                Thread.Sleep(10);
-                Message.ToPostMessage(p, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
-
-                Console.WriteLine("SendClick " + (Char)KeyValue + " pressed on " + p.ToString() + ".");
-            }
+            msg_api.ToPostMessage(target, (int)KeyBoardEventsFlag.WM_KEYDOWN, KeyValue, 0);
+            Thread.Sleep(10);
+            msg_api.ToPostMessage(target, (int)KeyBoardEventsFlag.WM_KEYUP, KeyValue, 0);
+            Thread.Sleep(10);
         }
 
         private void AutoClick_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //if (AssistantHwnd != IntPtr.Zero)
-            //{
-            //    Process[] process = Process.GetProcessesByName("Bluestacks");
 
-            //    process[0].Kill();
-
-            //    process = Process.GetProcessesByName("HD-Agent");
-
-            //    process[0].Kill();
-
-            //    process = Process.GetProcessesByName("HD-Player");
-
-            //    process[0].Kill();
-
-            //    process = Process.GetProcessesByName("BstkSVC");
-
-            //    process[0].Kill();
-
-            //    //this.Close();
-            //}
         }
 
         private void Reload_Imagedata()
@@ -350,7 +458,7 @@ namespace SummonersWar
             using (StreamReader sr = new StreamReader(SetupFilePath))
             {
                 string json = sr.ReadToEnd();
-                
+
                 //ClipSearchPoints = new List<Point>();
                 //delayTimes = new List<int>();
                 if (json != string.Empty)
@@ -360,10 +468,13 @@ namespace SummonersWar
                         list = JsonConvert.DeserializeObject<List<Image_directory>>(json);
                         for (int i = 0; i < list.Count; i++)
                         {
-                            data.Add(new Script_data() { img = Image.FromFile(list[i].path), delaytime = list[i].delaytime, IsForced = list[i].IsForceClick, SearchPoints = new Point(-1, -1) });
-                            //Imagelist.Add(Image.FromFile(list[i].path));
-                            //delayTimes.Add(list[i].delaytime);
-                            //ClipSearchPoints.Add(new Point(-1, -1));
+                            data.Add(new Script_data()
+                            {
+                                img = Image.FromFile(list[i].path),
+                                delaytime = list[i].delaytime,
+                                IsForced = list[i].IsForceClick,
+                                SearchPoints = new Point(-1, -1)
+                            });
                         }
                     }
                     catch (Exception ex)

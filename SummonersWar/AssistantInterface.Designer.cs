@@ -43,6 +43,18 @@
             this.BSRunningTimer = new System.Windows.Forms.Timer(this.components);
             this.CompareImageTimer = new System.Windows.Forms.Timer(this.components);
             this.SimulateClickTimer = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.movesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.captureScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptStartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptStopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.index0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchImgindexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.monitorLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clickIndexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.log_light = new System.Windows.Forms.Timer(this.components);
+            this.label2 = new System.Windows.Forms.Label();
             this.ToolMenu.SuspendLayout();
             this.InfoTable.SuspendLayout();
             this.SuspendLayout();
@@ -51,10 +63,11 @@
             // 
             this.ToolMenu.BackColor = System.Drawing.Color.Transparent;
             this.ToolMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripMenuItem});
+            this.openToolStripMenuItem,
+            this.movesToolStripMenuItem});
             this.ToolMenu.Location = new System.Drawing.Point(0, 0);
             this.ToolMenu.Name = "ToolMenu";
-            this.ToolMenu.Size = new System.Drawing.Size(370, 24);
+            this.ToolMenu.Size = new System.Drawing.Size(498, 24);
             this.ToolMenu.TabIndex = 0;
             this.ToolMenu.Text = "menuStrip1";
             // 
@@ -65,39 +78,41 @@
             this.summonerWarToolStripMenuItem,
             this.imageReloadToolStripMenuItem});
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
-            this.openToolStripMenuItem.Text = "Window";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.openToolStripMenuItem.Text = "Setting";
             // 
             // listHwndToolStripMenuItem
             // 
             this.listHwndToolStripMenuItem.Name = "listHwndToolStripMenuItem";
-            this.listHwndToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.listHwndToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.listHwndToolStripMenuItem.Text = "Window List";
             this.listHwndToolStripMenuItem.Click += new System.EventHandler(this.listHwndToolStripMenuItem_Click);
             // 
             // summonerWarToolStripMenuItem
             // 
             this.summonerWarToolStripMenuItem.Name = "summonerWarToolStripMenuItem";
-            this.summonerWarToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.summonerWarToolStripMenuItem.Text = "SummonerWar";
+            this.summonerWarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.summonerWarToolStripMenuItem.Text = "BlueStack load";
             this.summonerWarToolStripMenuItem.Click += new System.EventHandler(this.summonerWarToolStripMenuItem_Click);
             // 
             // imageReloadToolStripMenuItem
             // 
             this.imageReloadToolStripMenuItem.Name = "imageReloadToolStripMenuItem";
-            this.imageReloadToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
-            this.imageReloadToolStripMenuItem.Text = "Image Reload";
+            this.imageReloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.imageReloadToolStripMenuItem.Text = "Image dir";
             this.imageReloadToolStripMenuItem.Click += new System.EventHandler(this.imageReloadToolStripMenuItem_Click);
             // 
             // InfoTable
             // 
+            this.InfoTable.Controls.Add(this.label2);
+            this.InfoTable.Controls.Add(this.label1);
             this.InfoTable.Controls.Add(this.AStatus);
             this.InfoTable.Controls.Add(this.BStatus);
             this.InfoTable.Controls.Add(this.ATStatusLabel);
             this.InfoTable.Controls.Add(this.BStatusLabel);
             this.InfoTable.Location = new System.Drawing.Point(11, 27);
             this.InfoTable.Name = "InfoTable";
-            this.InfoTable.Size = new System.Drawing.Size(346, 148);
+            this.InfoTable.Size = new System.Drawing.Size(475, 148);
             this.InfoTable.TabIndex = 2;
             this.InfoTable.TabStop = false;
             this.InfoTable.Text = "Info";
@@ -105,7 +120,7 @@
             // AStatus
             // 
             this.AStatus.AutoSize = true;
-            this.AStatus.Location = new System.Drawing.Point(149, 66);
+            this.AStatus.Location = new System.Drawing.Point(149, 69);
             this.AStatus.Name = "AStatus";
             this.AStatus.Size = new System.Drawing.Size(18, 17);
             this.AStatus.TabIndex = 5;
@@ -123,7 +138,7 @@
             // ATStatusLabel
             // 
             this.ATStatusLabel.AutoSize = true;
-            this.ATStatusLabel.Location = new System.Drawing.Point(27, 66);
+            this.ATStatusLabel.Location = new System.Drawing.Point(27, 69);
             this.ATStatusLabel.Name = "ATStatusLabel";
             this.ATStatusLabel.Size = new System.Drawing.Size(113, 17);
             this.ATStatusLabel.TabIndex = 3;
@@ -148,21 +163,115 @@
             // 
             this.SimulateClickTimer.Tick += new System.EventHandler(this.SimulateClickTimer_Tick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(27, 101);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 17);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Log";
+            // 
+            // movesToolStripMenuItem
+            // 
+            this.movesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.captureScreenToolStripMenuItem,
+            this.scriptStartToolStripMenuItem,
+            this.scriptStopToolStripMenuItem,
+            this.index0ToolStripMenuItem,
+            this.indexToolStripMenuItem,
+            this.searchImgindexToolStripMenuItem,
+            this.monitorLogToolStripMenuItem,
+            this.clickIndexToolStripMenuItem});
+            this.movesToolStripMenuItem.Name = "movesToolStripMenuItem";
+            this.movesToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.movesToolStripMenuItem.Text = "Moves";
+            // 
+            // captureScreenToolStripMenuItem
+            // 
+            this.captureScreenToolStripMenuItem.Name = "captureScreenToolStripMenuItem";
+            this.captureScreenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.captureScreenToolStripMenuItem.Text = "Capture Screen";
+            this.captureScreenToolStripMenuItem.Click += new System.EventHandler(this.captureScreenToolStripMenuItem_Click);
+            // 
+            // scriptStartToolStripMenuItem
+            // 
+            this.scriptStartToolStripMenuItem.Name = "scriptStartToolStripMenuItem";
+            this.scriptStartToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scriptStartToolStripMenuItem.Text = "Script Start";
+            this.scriptStartToolStripMenuItem.Click += new System.EventHandler(this.scriptStartToolStripMenuItem_Click);
+            // 
+            // scriptStopToolStripMenuItem
+            // 
+            this.scriptStopToolStripMenuItem.Name = "scriptStopToolStripMenuItem";
+            this.scriptStopToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.scriptStopToolStripMenuItem.Text = "Script Stop";
+            this.scriptStopToolStripMenuItem.Click += new System.EventHandler(this.scriptStopToolStripMenuItem_Click);
+            // 
+            // index0ToolStripMenuItem
+            // 
+            this.index0ToolStripMenuItem.Name = "index0ToolStripMenuItem";
+            this.index0ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.index0ToolStripMenuItem.Text = "Index 0";
+            this.index0ToolStripMenuItem.Click += new System.EventHandler(this.index0ToolStripMenuItem_Click);
+            // 
+            // indexToolStripMenuItem
+            // 
+            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
+            this.indexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.indexToolStripMenuItem.Text = "Index ++";
+            this.indexToolStripMenuItem.Click += new System.EventHandler(this.indexToolStripMenuItem_Click);
+            // 
+            // searchImgindexToolStripMenuItem
+            // 
+            this.searchImgindexToolStripMenuItem.Name = "searchImgindexToolStripMenuItem";
+            this.searchImgindexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.searchImgindexToolStripMenuItem.Text = "Search Img[index]";
+            this.searchImgindexToolStripMenuItem.Click += new System.EventHandler(this.searchImgindexToolStripMenuItem_Click);
+            // 
+            // monitorLogToolStripMenuItem
+            // 
+            this.monitorLogToolStripMenuItem.Name = "monitorLogToolStripMenuItem";
+            this.monitorLogToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.monitorLogToolStripMenuItem.Text = "Monitor log";
+            this.monitorLogToolStripMenuItem.Click += new System.EventHandler(this.monitorLogToolStripMenuItem_Click);
+            // 
+            // clickIndexToolStripMenuItem
+            // 
+            this.clickIndexToolStripMenuItem.Name = "clickIndexToolStripMenuItem";
+            this.clickIndexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clickIndexToolStripMenuItem.Text = "Click[Index]";
+            this.clickIndexToolStripMenuItem.Click += new System.EventHandler(this.clickIndexToolStripMenuItem_Click);
+            // 
+            // log_light
+            // 
+            this.log_light.Interval = 3000;
+            this.log_light.Tick += new System.EventHandler(this.log_light_Tick);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(27, 125);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(73, 17);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Search_log";
+            // 
             // AssistantInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 187);
+            this.ClientSize = new System.Drawing.Size(498, 187);
             this.Controls.Add(this.InfoTable);
             this.Controls.Add(this.ToolMenu);
             this.Font = new System.Drawing.Font("微軟正黑體", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.ToolMenu;
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.Name = "AssistantInterface";
-            this.Text = " Assistant Interface";
+            this.Text = " Assistant";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AutoClick_FormClosing);
             this.ToolMenu.ResumeLayout(false);
             this.ToolMenu.PerformLayout();
@@ -188,6 +297,18 @@
         private System.Windows.Forms.Timer CompareImageTimer;
         private System.Windows.Forms.Timer SimulateClickTimer;
         private System.Windows.Forms.ToolStripMenuItem imageReloadToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem movesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem captureScreenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scriptStartToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scriptStopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem index0ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem indexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchImgindexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem monitorLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clickIndexToolStripMenuItem;
+        private System.Windows.Forms.Timer log_light;
+        private System.Windows.Forms.Label label2;
     }
 }
 
