@@ -25,7 +25,7 @@ namespace SummonersWar
         ScreenCapture CaptureScreen = new ScreenCapture();
         SearchImage Search = new SearchImage();
 
-        int Index = 0;
+        static int Index = 0;
         bool IsAssistantWorking = false;
         string SetupFilePath = System.IO.Directory.GetCurrentDirectory() + "\\ImgSetup.json";
 
@@ -37,6 +37,8 @@ namespace SummonersWar
         List<IntPtr> AssistantWindowHwndList = new List<IntPtr>();
 
         IntPtr BlueStackHwnd = IntPtr.Zero, target = IntPtr.Zero;
+
+        private static SemaphoreSlim _sem = new SemaphoreSlim(3);
         public enum KeyBoardEventsFlag
         {
             WM_KEYDOWN = 0x100,
@@ -153,14 +155,11 @@ namespace SummonersWar
         #endregion
 
         #region Timer Events
-
-        private void SimulateClickTimer_Tick(object sender, EventArgs e)
+        private async void SimulateClickTimer_Tick(object sender, EventArgs e)
         {
             log_light.Start();
             Image Source = CaptureScreen.CapturehWndWindow(AssistantHwnd);
-            //Bitmap src = (Bitmap)Source.Clone();
             Bitmap compare = (Bitmap)data[Index].img.Clone();
-            //Point BitResult = Search.SearchPixelBitmap(src, compare, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
             Point Result = Search.SearchLockBitmap((Bitmap)Source.Clone(), compare, data[Index].SearchPoints.X, data[Index].SearchPoints.Y);
 
             if (Result.X == -1 && Result.Y == -1)
@@ -169,62 +168,12 @@ namespace SummonersWar
             }
             else
             {
-                Thread.Sleep(300);
-                SendClickEvents(Index);
-                switch (Index)
-                {
-                    case 0:
-                        Thread.Sleep(350);
-                        SendClickEvents(Index);
-                        Thread.Sleep(350);
-                        SendClickEvents(Index);
-                        
-                        Thread.Sleep(1000);
-
-                        SendClickEvents(1);
-                        Thread.Sleep(500);
-                        SendClickEvents(2);
-                        Thread.Sleep(500);
-                        SendClickEvents(2);
-                        Index = 4;
-                        break;
-                    case 1:
-                    case 2:
-                    case 3:
-                        //Thread.Sleep(150);
-                        //Index++;
-                        break;
-                    case 4:
-                        Index = 0;
-                        break;
-                }
-
-                Thread.Sleep(100);
                 label2.Text = "Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
+                await SendClickEventAsy(Index);
+                Console.WriteLine("await function done waiting ..");
             }
 
-            //if (Result.X == -1 && Result.Y == -1)
-            //{
-            //    this.Text = "AutoClick Searching Failure , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
-
-            //    if (data[Index].IsForced)
-            //    {
-            //        SendClickEvents(Index);
-            //        Index = (data.Count - 1 == Index) ? 0 : Index + 1;
-            //    }
-            //}
-            //else
-            //{
-            //    this.Text = "AutoClick Searching Success , Index = " + Index.ToString() + " : Point = (" + Result.X + " , " + Result.Y + ")";
-
-            //    Thread.Sleep(100);
-            //    SendClickEvents(Index);
-            //    Index = (data.Count - 1 == Index) ? 0 : Index + 1;
-
-            //}
-
             Source.Dispose();
-            //src.Dispose();
             compare.Dispose();
         }
 
@@ -250,14 +199,12 @@ namespace SummonersWar
 
         private void summonerWarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Console.WriteLine(window.ToShowWindowAsync(target, 3));//3 max 2 min 1 normal
-
             if (!IsAssistantWorking)
             {
                 IntPtr TargetHwnd = wapi.ToFindWindow("BlueStacks");
                 BlueStackHwnd = TargetHwnd;
 
-                wapi.ToShowWindowAsync(TargetHwnd, 3);
+                wapi.ToShowWindowAsync(TargetHwnd, 3); //3 max 2 min 1 normal
                 Thread.Sleep(500);
                 WindowsAPI.RECT rect = wapi.ToGetWindowRect(TargetHwnd);
 
@@ -396,7 +343,54 @@ namespace SummonersWar
 
         private void monitorLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            TestCorrect();
+        }
 
+        public async Task SendClickEventAsy(int Index)
+        {
+            await Task.Run(async () => { await Task.Delay(300); });
+            SendClickEvents(Index);
+
+            switch (Index)
+            {
+                case 0:
+                    // Case0 event = above all
+                    await Task.Run(async () =>  { await Task.Delay(300); });
+                    SendClickEvents(Index);
+                    await Task.Run(async () => { await Task.Delay(500); });
+                    SendClickEvents(Index);
+                    await Task.Run(async () => { await Task.Delay(1100); });
+
+                    SendClickEvents(1);
+                    await Task.Run(async () => { await Task.Delay(500); });
+                    SendClickEvents(2);
+                    await Task.Run(async () => { await Task.Delay(500); });
+                    SendClickEvents(2);
+                    Index = 4;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                    break;
+                case 4:
+                    Index = 0;
+                    break;
+            }
+            // Thread.sleep() , Task.delay() Delay time is different(by experiencing)
+
+            await Task.Run(async () => { await Task.Delay(300); });
+            SendClickEvents(Index);
+        }
+
+        public async Task TestCorrect()
+        {
+            await Task.Run(async () => //Task.Run automatically unwraps nested Task types!
+            {
+                Console.WriteLine("Start");
+                await Task.Delay(5000);
+                Console.WriteLine("Done");
+            });
+            Console.WriteLine("All done");
         }
 
         #endregion
@@ -486,6 +480,7 @@ namespace SummonersWar
             }
             //JsonConvert
         }
+
     }
 
 }

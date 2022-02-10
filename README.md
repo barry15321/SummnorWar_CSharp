@@ -18,7 +18,7 @@ Summoners War 自動化腳本程式 (.Net版本)
 <h1 id="environment">開發環境</h1>
 
 Window7/10 + Visual Studio (.net 4.5.2) + Bluestacks。
-建議使用舊版BS。
+建議使用舊版BS。（目前更新及開發使用3-54-65版本）
 
 <h1 id="introduce">使用介紹</h1>
 
